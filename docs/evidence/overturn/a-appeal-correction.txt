@@ -1,0 +1,4 @@
+Courier correction notice - issued 2026-10-07 by the courier's dispatch office
+Delivery log entry 14 of route 12 (2026-10-01) was misattributed. It belongs to order #4418 (client Sam Whitfield, Sukhumvit address, signature "S.W.").
+Order #4417 (client Alex Rivers) was NOT delivered: the parcel was returned to the sender on 2026-10-02 as undeliverable and has stayed in the sender's warehouse since.
+Status of order #4417: NOT DELIVERED.
