@@ -1,0 +1,445 @@
+{
+  "network": "studionet",
+  "address": "0x19A938d1A7d10f98C07e54Cf4Da6944028074F47",
+  "wallets": {
+    "A": "0xBb9E609bf277a0Ffb0018515d0a850037C2b17c3",
+    "B": "0x4114320e6217407814992C42DC4573ea85A00b60"
+  },
+  "steps": [
+    {
+      "step": "claim_points (A)",
+      "wallet": "A",
+      "method": "claim_points",
+      "tx": "0x43d4f8e92cff96334f08fabd932f883b761b7d1fc491bc3c94a6ab562459f1b6",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x43d4f8e92cff96334f08fabd932f883b761b7d1fc491bc3c94a6ab562459f1b6",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "seconds": 4
+    },
+    {
+      "step": "claim_points (B)",
+      "wallet": "B",
+      "method": "claim_points",
+      "tx": "0x290b8cdedfcc92e567f0f0665f72a573e39ec47f4e59b147b75245e0ba925307",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x290b8cdedfcc92e567f0f0665f72a573e39ec47f4e59b147b75245e0ba925307",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "seconds": 5
+    },
+    {
+      "step": "file frivolous case",
+      "wallet": "A",
+      "method": "file_case",
+      "tx": "0xba5600e48ea146719cffe1c1264245e1986fd57106a977c3012138e397259d8e",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xba5600e48ea146719cffe1c1264245e1986fd57106a977c3012138e397259d8e",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "seconds": 9
+    },
+    {
+      "step": "file: Eiffel bet - no response case",
+      "wallet": "A",
+      "method": "file_case",
+      "tx": "0xc11a25112c4b1bf1cb30b24e9a2e17c344bc759e12d30eeada3e90893e911bf1",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xc11a25112c4b1bf1cb30b24e9a2e17c344bc759e12d30eeada3e90893e911bf1",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "seconds": 9
+    },
+    {
+      "step": "file: Eiffel bet - ruling timeout case",
+      "wallet": "A",
+      "method": "file_case",
+      "tx": "0x649e2e950f297c4573926d5c55e9623a41397e3332dd020e53f7f91ce82bd282",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x649e2e950f297c4573926d5c55e9623a41397e3332dd020e53f7f91ce82bd282",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "seconds": 13
+    },
+    {
+      "step": "respond case 2",
+      "wallet": "B",
+      "method": "respond",
+      "tx": "0x387737c0df714ac96d2046760ce42977adcab19d9129113191ff4d87ce2b7067",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x387737c0df714ac96d2046760ce42977adcab19d9129113191ff4d87ce2b7067",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "seconds": 9
+    },
+    {
+      "step": "file: Eiffel bet - full path",
+      "wallet": "A",
+      "method": "file_case",
+      "tx": "0x02c85b6c938aa42e19657ce22c660da74a8dcff5b8632401756cabe53adbd33f",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x02c85b6c938aa42e19657ce22c660da74a8dcff5b8632401756cabe53adbd33f",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "seconds": 9
+    },
+    {
+      "step": "respond case 3",
+      "wallet": "B",
+      "method": "respond",
+      "tx": "0x871427e9dbae73eb30b628995b385e9bc7947768d3aa2c340d12041fe543dc08",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x871427e9dbae73eb30b628995b385e9bc7947768d3aa2c340d12041fe543dc08",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "seconds": 4
+    },
+    {
+      "step": "rule (AI validators read both sides' evidence)",
+      "wallet": "A",
+      "method": "rule",
+      "tx": "0x212534183c4e05a43269d9a7f99f4e7942c8dc9a41708d347a6253680c675579",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x212534183c4e05a43269d9a7f99f4e7942c8dc9a41708d347a6253680c675579",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "seconds": 21
+    },
+    {
+      "step": "appeal by prevailing party reverts",
+      "wallet": "A",
+      "method": "appeal",
+      "tx": "0x01ad15a8351dac1f7ddcd518ceba2dd11dbc65b6dafcec3fd1da44d172352eb7",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x01ad15a8351dac1f7ddcd518ceba2dd11dbc65b6dafcec3fd1da44d172352eb7",
+      "status": "ACCEPTED",
+      "execution": "ERROR",
+      "ok": true,
+      "expected": "revert",
+      "seconds": 5
+    },
+    {
+      "step": "appeal by B (bond 100)",
+      "wallet": "B",
+      "method": "appeal",
+      "tx": "0x39593b500380b42b0a580c6f005a195c950a4b382caceb5c1bf363c4d1aeb96e",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x39593b500380b42b0a580c6f005a195c950a4b382caceb5c1bf363c4d1aeb96e",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "seconds": 9
+    },
+    {
+      "step": "rule_appeal (stricter second round)",
+      "wallet": "A",
+      "method": "rule_appeal",
+      "tx": "0x096a8bfe64affd52754e960c5dc967a0e3080dc4c6875377d88a73ae63ad596d",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x096a8bfe64affd52754e960c5dc967a0e3080dc4c6875377d88a73ae63ad596d",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "seconds": 30
+    },
+    {
+      "step": "file: Eiffel bet - no appeal case",
+      "wallet": "A",
+      "method": "file_case",
+      "tx": "0x0b20e241b8a6422d186dffb73307e70db07e59d55b98b0396bc2e33b72faf9b0",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x0b20e241b8a6422d186dffb73307e70db07e59d55b98b0396bc2e33b72faf9b0",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "seconds": 13
+    },
+    {
+      "step": "respond case 4",
+      "wallet": "B",
+      "method": "respond",
+      "tx": "0x3eb8c2eb0000bd60eaf7ff77b7149457a6e2ac83e0fcdfe2d74bbf7f88691448",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x3eb8c2eb0000bd60eaf7ff77b7149457a6e2ac83e0fcdfe2d74bbf7f88691448",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "seconds": 5
+    },
+    {
+      "step": "rule (no-appeal case)",
+      "wallet": "A",
+      "method": "rule",
+      "tx": "0xde949612325232902ec8157a733628c5be04a71183aa1448377a9a416c24b2b0",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xde949612325232902ec8157a733628c5be04a71183aa1448377a9a416c24b2b0",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "seconds": 96
+    },
+    {
+      "step": "finalize after appeal window",
+      "wallet": "B",
+      "method": "finalize",
+      "tx": "0xbe19065ad1a2c4c3de3d75a0f34c4d715fa1c78d1a7fd40fc9c3cca7aa8c7082",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xbe19065ad1a2c4c3de3d75a0f34c4d715fa1c78d1a7fd40fc9c3cca7aa8c7082",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "seconds": 9
+    },
+    {
+      "step": "expire no-response case",
+      "wallet": "B",
+      "method": "expire",
+      "tx": "0xa21d86a168b06c9dfa3bae99b1b8652f90c851a8bfd5edb67cbb2112e61d283e",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xa21d86a168b06c9dfa3bae99b1b8652f90c851a8bfd5edb67cbb2112e61d283e",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "seconds": 9
+    },
+    {
+      "step": "rule after ruling deadline reverts",
+      "wallet": "A",
+      "method": "rule",
+      "tx": "0x58905fbc938a8842ceebb8720cfa3c6645308a34a09d91b3d68247a260a4453c",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x58905fbc938a8842ceebb8720cfa3c6645308a34a09d91b3d68247a260a4453c",
+      "status": "ACCEPTED",
+      "execution": "ERROR",
+      "ok": true,
+      "expected": "revert",
+      "seconds": 9
+    },
+    {
+      "step": "expire ruling-timeout case",
+      "wallet": "B",
+      "method": "expire",
+      "tx": "0x3f8cd97060d0f340d6aa052771630ec735d9dd0b40347dc648a7643a70e00ae3",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x3f8cd97060d0f340d6aa052771630ec735d9dd0b40347dc648a7643a70e00ae3",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "seconds": 5
+    },
+    {
+      "step": "file: Eiffel bet - appeal timeout case",
+      "wallet": "A",
+      "method": "file_case",
+      "tx": "0x9b1d017d5d8513d55745bd730efe777d76759920631485ecce64caa7b39e1f8d",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x9b1d017d5d8513d55745bd730efe777d76759920631485ecce64caa7b39e1f8d",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "seconds": 21
+    },
+    {
+      "step": "respond case 5",
+      "wallet": "B",
+      "method": "respond",
+      "tx": "0x123853e76bca4d6ae1d8a61b99299bc587af7c93c174a32d574531242b579f70",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x123853e76bca4d6ae1d8a61b99299bc587af7c93c174a32d574531242b579f70",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "seconds": 9
+    },
+    {
+      "step": "rule (appeal-timeout case)",
+      "wallet": "A",
+      "method": "rule",
+      "tx": "0x126a53390d4c6fb162b7b895aec6c092c8492dbca49fcd32e6dfa5014b1c50e3",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x126a53390d4c6fb162b7b895aec6c092c8492dbca49fcd32e6dfa5014b1c50e3",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "seconds": 25
+    },
+    {
+      "step": "appeal by B",
+      "wallet": "B",
+      "method": "appeal",
+      "tx": "0xc5b721e3fff0c699245a8700ab96b18998c6bdd9fada6bbdf2012b9338921eab",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xc5b721e3fff0c699245a8700ab96b18998c6bdd9fada6bbdf2012b9338921eab",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "seconds": 9
+    },
+    {
+      "step": "rule_appeal after deadline reverts",
+      "wallet": "A",
+      "method": "rule_appeal",
+      "tx": "0x1b0276c48539f77b52d286fff228de950c36cd86ebdbdddc10d16e0f811668cc",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x1b0276c48539f77b52d286fff228de950c36cd86ebdbdddc10d16e0f811668cc",
+      "status": "ACCEPTED",
+      "execution": "ERROR",
+      "ok": true,
+      "expected": "revert",
+      "seconds": 9
+    },
+    {
+      "step": "expire appeal-timeout case",
+      "wallet": "B",
+      "method": "expire",
+      "tx": "0xcf92a39e767f191c8a01e9e33dbc746becd0ab40c2316384339ff32e86ec2801",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xcf92a39e767f191c8a01e9e33dbc746becd0ab40c2316384339ff32e86ec2801",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "seconds": 9
+    }
+  ],
+  "checks": [
+    {
+      "check": "frivolous case rejected by AI screen",
+      "pass": true,
+      "detail": {
+        "status": "REJECTED",
+        "reason": "Frivolous claim with no concrete facts or specific relief requested."
+      }
+    },
+    {
+      "check": "ruling issued with quote + reasoning",
+      "pass": true,
+      "detail": {
+        "ruling": "CLAIMANT",
+        "quote": "The tower is 330 metres (1,083 ft) tall,[9] about the same height as an 81-storey building, and the tallest structure in Paris.",
+        "source": "https://en.wikipedia.org/wiki/Eiffel_Tower"
+      }
+    },
+    {
+      "check": "appeal settled case",
+      "pass": true,
+      "detail": {
+        "ruling": "CLAIMANT",
+        "appeal": "UPHELD"
+      }
+    },
+    {
+      "check": "case finalized after window",
+      "pass": true,
+      "detail": {
+        "ruling": "CLAIMANT"
+      }
+    },
+    {
+      "check": "no-response timeout voids + refunds claimant",
+      "pass": true,
+      "detail": {
+        "reason": "NO_RESPONSE"
+      }
+    },
+    {
+      "check": "ruling timeout voids + refunds both",
+      "pass": true,
+      "detail": {
+        "reason": "RULING_TIMEOUT"
+      }
+    },
+    {
+      "check": "appeal timeout voids + refunds stakes and bond",
+      "pass": true,
+      "detail": {
+        "reason": "APPEAL_TIMEOUT"
+      }
+    },
+    {
+      "check": "points conserved between the two wallets",
+      "pass": true,
+      "detail": {
+        "startA": 1000,
+        "startB": 1000,
+        "endA": 1300,
+        "endB": 700
+      }
+    }
+  ],
+  "cases": {
+    "frivolous": 0,
+    "noResponse": 1,
+    "rulingTimeout": 2,
+    "fullPath": 3,
+    "plain": 4,
+    "appealTimeout": 5
+  },
+  "evidence": {
+    "fullPath": [
+      {
+        "caller": "0xBb9E609bf277a0Ffb0018515d0a850037C2b17c3",
+        "evidence_quote": "The tower is 330 metres (1,083 ft) tall,[9] about the same height as an 81-storey building, and the tallest structure in Paris.",
+        "kind": "INITIAL",
+        "reasoning": "The evidence explicitly states that the current height of the tower is 330 metres, which includes the broadcasting aerial added in 1957. Since this measurement exceeds the 320-metre threshold specified in the bet, the claimant has successfully substantiated their case.",
+        "ruling": "CLAIMANT",
+        "source_url": "https://en.wikipedia.org/wiki/Eiffel_Tower",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Eiffel_Tower",
+          "https://en.wikipedia.org/wiki/Eiffel_Tower"
+        ],
+        "timestamp": 1792032787
+      },
+      {
+        "caller": "0xBb9E609bf277a0Ffb0018515d0a850037C2b17c3",
+        "evidence_quote": "The tower is 330 metres (1,083 ft) tall,[9] about the same height as an 81-storey building, and the tallest structure in Paris.",
+        "kind": "APPEAL",
+        "reasoning": "The evidence explicitly states the current height of the tower is 330 metres, which satisfies the condition of being taller than 320 metres including antennas. The respondent's argument regarding the original height does not refute the tower's current height as documented in the provided encyclopedia entry.",
+        "ruling": "CLAIMANT",
+        "source_url": "https://en.wikipedia.org/wiki/Eiffel_Tower",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Eiffel_Tower",
+          "https://en.wikipedia.org/wiki/Eiffel_Tower",
+          "https://en.wikipedia.org/wiki/Eiffel_Tower#Height"
+        ],
+        "timestamp": 1792032823
+      }
+    ],
+    "plain": [
+      {
+        "caller": "0xBb9E609bf277a0Ffb0018515d0a850037C2b17c3",
+        "evidence_quote": "The tower is 330 metres (1,083 ft) tall,[9] about the same height as an 81-storey building, and the tallest structure in Paris.",
+        "kind": "INITIAL",
+        "reasoning": "The evidence states that the Eiffel Tower is 330 metres tall, which is greater than 320 metres. That supports the claimant's account of the bet and does not support the respondent's assertion that the tower is only 300 metres tall for purposes of the wager including antennas.",
+        "ruling": "CLAIMANT",
+        "source_url": "https://en.wikipedia.org/wiki/Eiffel_Tower",
+        "sources": [
+          "https://en.wikipedia.org/wiki/Eiffel_Tower",
+          "https://en.wikipedia.org/wiki/Eiffel_Tower"
+        ],
+        "timestamp": 1792032873
+      }
+    ]
+  },
+  "stats": {
+    "appeals": 2,
+    "by_status": {
+      "APPEALED": 0,
+      "AWAITING_RESPONSE": 0,
+      "FINAL": 2,
+      "READY": 0,
+      "REJECTED": 1,
+      "RULED": 0,
+      "VOID": 3
+    },
+    "cases": 6,
+    "overturned": 0,
+    "total_staked": 900,
+    "users": 2
+  }
+}
