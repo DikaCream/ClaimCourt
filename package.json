@@ -1,0 +1,21 @@
+{
+  "name": "claimcourt",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "ClaimCourt - a mini on-chain court where GenLayer AI validators read both sides' evidence and rule, with a bonded appeal round and hard timeouts",
+  "scripts": {
+    "wallet:new": "node scripts/create-wallet.mjs",
+    "schema": "node scripts/schema-check.mjs",
+    "deploy:studionet": "node scripts/deploy.mjs",
+    "e2e:studionet": "node scripts/e2e.mjs",
+    "lint:contract": "genvm-lint check contracts/claimcourt.py",
+    "test:contract": "pytest tests/direct/ -v",
+    "dev": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build"
+  },
+  "dependencies": {
+    "dotenv": "16.6.1",
+    "genlayer-js": "1.1.8"
+  }
+}

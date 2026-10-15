@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  contract:
+    name: Contract lint + direct tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - name: Install Python tooling
+        run: pip install -r requirements.txt
+      - name: Cache GenVM SDK used by direct tests
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/gltest-direct
+          key: gltest-direct-${{ runner.os }}-${{ hashFiles('requirements.txt') }}
+      - name: genvm-lint
+        run: genvm-lint check contracts/claimcourt.py
+      - name: Direct-mode tests (mock web + LLM)
+        run: pytest tests/direct/ -q
+
+  frontend:
+    name: Frontend build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    env:
+      NEXT_PUBLIC_CONTRACT_ADDRESS: "0x19A938d1A7d10f98C07e54Cf4Da6944028074F47"
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Type check
+        run: npm run lint
+      - name: Build
+        run: npm run build
