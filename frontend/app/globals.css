@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-serif: var(--font-newsreader), Georgia, serif;
+  --font-type: var(--font-courier), "Courier New", monospace;
+  --color-desk: #25211b;
+  --color-paper: #efe7d4;
+  --color-paper-2: #e6dbc2;
+  --color-paper-3: #d9ccae;
+  --color-ink: #1c1915;
+  --color-ink-2: #5a5244;
+  --color-rule: #b9ac8e;
+  --color-stamp: #a3261a;
+  --color-navy: #23406b;
+  --color-ochre: #8a5a14;
+  --color-moss: #2f5d3a;
+  --color-plum: #5b4b6b;
+}
+
+html { background: var(--color-desk); }
+body {
+  min-height: 100vh;
+  color: var(--color-ink);
+  background:
+    radial-gradient(1200px 600px at 50% -10%, rgba(255, 220, 150, 0.08), transparent 70%),
+    var(--color-desk);
+  font-family: var(--font-serif);
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+/* The sheet of paper everything sits on */
+.sheet {
+  position: relative;
+  background-color: var(--color-paper);
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .28  0 0 0 0 .15  0 0 0 .12 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"),
+    linear-gradient(90deg, transparent 0 62px, rgba(163, 38, 26, 0.35) 62px 63px, transparent 63px);
+  box-shadow: 0 1px 0 #fff4 inset, 0 30px 60px -20px #000a, 0 2px 0 var(--color-paper-3), 0 6px 0 -1px #cfc3a4, 0 10px 0 -2px #bfb394;
+}
+@media (max-width: 720px) { .sheet { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .28  0 0 0 0 .15  0 0 0 .12 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); } }
+
+.rule-double { border-top: 3px double var(--color-ink); }
+.rule-thin { border-top: 1px solid var(--color-ink); }
+.smallcaps { font-variant-caps: all-small-caps; letter-spacing: 0.08em; }
+.typed { font-family: var(--font-type); letter-spacing: -0.01em; }
+.label { font-family: var(--font-type); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-ink-2); }
+
+/* Verdict / status stamps */
+.stamp {
+  display: inline-block;
+  font-family: var(--font-type);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 0.15em 0.6em;
+  border: 2.5px solid currentColor;
+  border-radius: 4px;
+  outline: 1px solid currentColor;
+  outline-offset: 2px;
+  mix-blend-mode: multiply;
+  opacity: 0.92;
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='m'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.1 1.6'/></filter><rect width='100%' height='100%' filter='url(%23m)'/></svg>");
+  mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='m'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.1 1.6'/></filter><rect width='100%' height='100%' filter='url(%23m)'/></svg>");
+}
+.stamp-lg { font-size: clamp(1.6rem, 5vw, 2.8rem); transform: rotate(-6deg); padding: 0.12em 0.5em; }
+.stamp-sm { font-size: 11px; }
+@keyframes thud { 0% { transform: rotate(-6deg) scale(1.9); opacity: 0; } 60% { transform: rotate(-6deg) scale(0.96); opacity: 1; } 100% { transform: rotate(-6deg) scale(1); opacity: 0.92; } }
+.stamp-anim { animation: thud 0.55s cubic-bezier(.2,.9,.3,1.2) both; }
+
+/* Docket rows */
+.docket-row { border-bottom: 1px dotted var(--color-ink-2); transition: background 0.15s; }
+.docket-row:hover { background: rgba(163, 38, 26, 0.06); }
+
+/* Form fields: typed on a line */
+.field {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-bottom: 1.5px solid var(--color-ink);
+  padding: 0.35rem 0.1rem;
+  font-family: var(--font-type);
+  font-size: 15px;
+  color: var(--color-ink);
+  border-radius: 0;
+}
+textarea.field { border: 1.5px solid var(--color-ink); padding: 0.5rem; background: rgba(255, 255, 255, 0.25); line-height: 1.5; }
+.field:focus { outline: none; background: rgba(255, 244, 190, 0.5); border-color: var(--color-stamp); }
+.field::placeholder { color: #8d8368; }
+
+.btn {
+  font-family: var(--font-type);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 0.65rem 1.1rem;
+  border: 2px solid var(--color-ink);
+  background: var(--color-ink);
+  color: var(--color-paper);
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
+  box-shadow: 3px 3px 0 var(--color-stamp);
+}
+.btn:hover:not(:disabled) { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--color-stamp); }
+.btn:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--color-stamp); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
+.btn-ghost { background: transparent; color: var(--color-ink); box-shadow: 3px 3px 0 var(--color-rule); }
+.btn-red { background: var(--color-stamp); border-color: var(--color-stamp); box-shadow: 3px 3px 0 var(--color-ink); }
+
+.tab {
+  font-family: var(--font-type); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 0.45rem 0.9rem 0.35rem; border: 1.5px solid var(--color-ink); border-bottom: none;
+  background: var(--color-paper-2); margin-right: -1.5px; border-radius: 10px 10px 0 0; cursor: pointer; color: var(--color-ink-2);
+}
+.tab[aria-selected="true"] { background: var(--color-paper); color: var(--color-ink); font-weight: 700; position: relative; top: 1.5px; }
+
+.dropcap::first-letter { font-family: var(--font-display); font-weight: 700; float: left; font-size: 3.4em; line-height: 0.82; padding: 0.06em 0.1em 0 0; color: var(--color-stamp); }
+.pleading { background: rgba(255, 255, 255, 0.28); border: 1.5px solid var(--color-ink); box-shadow: 4px 4px 0 var(--color-paper-3); }
+.ink-link { text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px; }
+.ink-link:hover { color: var(--color-stamp); }
+@keyframes typeline { from { opacity: 0; transform: translateY(2px); } to { opacity: 1; transform: none; } }
+.log-line { animation: typeline 0.25s ease both; }
+::selection { background: var(--color-stamp); color: var(--color-paper); }
