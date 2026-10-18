@@ -63,7 +63,7 @@ export function ClerkLog({ status, hash, error }: { status: string | null; hash?
           {i === lines.length - 1 && !failed && status !== "ACCEPTED" && status !== "FINALIZED" && <span className="animate-pulse">…</span>}
         </div>
       ))}
-      {failed && <div className="text-stamp">Validators could not agree ({status}).</div>}
+      {failed && <div className="text-stamp">Validators could not agree ({status}). Nothing was recorded and no points moved. You can retry, or let the deadline pass and void the case for a full refund.</div>}
       {error && <div className="mt-1 text-stamp">Rejected: {error}</div>}
       {hash && (
         <a href={txExplorerUrl(hash)} target="_blank" rel="noreferrer" className="ink-link mt-1 inline-block text-ink-2">

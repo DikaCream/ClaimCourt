@@ -6,9 +6,36 @@ and up to three public evidence URLs, and GenLayer AI validators fetch the evide
 A party who did not prevail can appeal once, for a bond, under a stricter standard. Every stage has a deadline, so no case can hang.
 
 - Network: GenLayer **Studionet** (chain ID 61999, RPC `https://studio.genlayer.com/api`, gasless)
+- Live app: https://claimcourt-dikacreams-projects.vercel.app
 - Contract: [`contracts/claimcourt.py`](contracts/claimcourt.py), deployed at `0x19A938d1A7d10f98C07e54Cf4Da6944028074F47`
 - Frontend: Next.js 16 + Tailwind 4 + MetaMask, an "editorial paper docket" design (`frontend/`)
 - Stakes are **points with no monetary value** (1,000 free starting points per wallet)
+
+## Why GenLayer
+
+The question is *"which side do these web pages support?"* That is judgment over unstructured text, which none of the usual tools can give:
+
+- **Oracles (Chainlink, Pyth)** deliver numbers from pre-agreed feeds; a dispute has no feed.
+- **A plain contract** cannot fetch or read a page (only count human votes, with their own bribery and liveness issues).
+- **An admin or one AI API** means one party decides other people's stakes.
+
+On GenLayer every validator fetches the exhibits itself and runs its own LLM. A ruling is accepted only if validators reproduce the same label
+(`CLAIMANT` / `RESPONDENT` / `INCONCLUSIVE`) **and** the leader's verbatim quote really appears on the cited page (custom equivalence principle,
+`gl.vm.run_nondet_unsafe`). Stakes, deadlines, URL rules and payouts remain plain deterministic contract code.
+
+## Architecture
+
+```mermaid
+flowchart LR
+  P[Claimant / respondent<br/>MetaMask] --> F[Next.js app on Vercel]
+  F -- genlayer-js --> C[(ClaimCourt contract<br/>Studionet)]
+  C -- rule / rule_appeal --> L{Leader validator<br/>fetch exhibits + LLM}
+  L -- label + verbatim quote --> V[Validators re-fetch and re-judge<br/>agree only if label matches and quote is on the page]
+  V -- agreed --> C
+  V -. disagree .-> X[Nothing stored; deadline then expire = refund]
+  W[(Public evidence URLs)] --> L
+  W --> V
+```
 
 ## How a case works
 
@@ -42,6 +69,7 @@ Full document: **[docs/TRUST_MODEL.md](docs/TRUST_MODEL.md)**. Summary:
   Anything without a verifiable quote is downgraded to `INCONCLUSIVE`, which refunds both sides, so doubt never moves value.
 - **Disagreement.** No majority means no ruling is stored; the ruling deadline then lets anyone `expire` the case and refund both stakes.
 - **Challenge.** One bonded, stricter appeal (change the ruling only on clear and convincing evidence with a verbatim quote). Wrong appellants lose the bond.
+- **Attack scenarios** (prompt injection, evidence swapping, ruling-time manipulation, sybil, collusion, stalling) are tabulated with mitigations and gaps in section 5b of the trust model.
 - **Residual risks** (mutable pages, model error, prompt injection, colluding wallets, testnet validators) are listed honestly in the trust model.
 
 ## Development
