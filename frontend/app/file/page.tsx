@@ -121,6 +121,11 @@ export default function FileCase() {
           {tx.busy ? "Validators are screening…" : `Stamp & file (stake ${f.stake} pts)`}
         </button>
         {!w.address && <span className="ml-3 typed text-[12px]">Sign in with MetaMask first.</span>}
+        {w.address && !w.isCorrectChain && (
+          <span className="ml-3 typed text-[12px] text-stamp">
+            Wrong network. <button type="button" className="ink-link underline" onClick={w.switchChain}>Switch to GenLayer Studionet</button>
+          </span>
+        )}
         <ClerkLog status={tx.status} hash={tx.hash} error={tx.error} />
       </div>
     </form>

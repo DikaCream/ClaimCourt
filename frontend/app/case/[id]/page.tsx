@@ -177,6 +177,12 @@ function Motions({ c }: { c: CourtCase }) {
     <>
       <SectionTitle n="V.">Motions available to you</SectionTitle>
       {!me && <p className="typed text-[13px]">Sign in with MetaMask to act on this case.</p>}
+      {me && !w.isCorrectChain && (
+        <p className="typed text-[13px] text-stamp">
+          Your wallet is on the wrong network.{" "}
+          <button className="ink-link underline" onClick={w.switchChain}>Switch to GenLayer Studionet</button> to act on this case.
+        </p>
+      )}
       <div className="space-y-4">{items}</div>
       <ClerkLog status={tx.status} hash={tx.hash} error={tx.error} />
     </>
@@ -191,9 +197,9 @@ export default function CasePage() {
   const ev = useEvidence(Number.isInteger(id) ? id : null, c?.rounds ?? 0);
   const now = useNow();
   if (q.isLoading) return <p className="py-10 typed animate-pulse">The clerk is pulling the file…</p>;
-  if (q.error || !c) return <p className="py-10 typed text-stamp">Case not found. <Link href="/" className="ink-link">Back to the docket</Link></p>;
+  if (!Number.isInteger(id) || id < 0) return <p className="py-10 typed text-stamp">That is not a case number. <Link href="/" className="ink-link">Back to the docket</Link></p>;
+  if (q.error || !c) return <p className="py-10 typed text-stamp">Could not load case {id}: {q.error ? String((q.error as Error).message).slice(0, 160) : "no such case"}. <Link href="/" className="ink-link">Back to the docket</Link></p>;
 
-  const pending = c.status !== "FINAL" && c.status !== "VOID" && c.status !== "REJECTED";
   return (
     <div className="pt-8">
       <Link href="/" className="typed text-[12px] ink-link">← The docket</Link>
@@ -258,7 +264,7 @@ export default function CasePage() {
         </>
       )}
 
-      {pending || c.status === "VOID" ? <Motions c={c} /> : null}
+      <Motions c={c} />
     </div>
   );
 }
