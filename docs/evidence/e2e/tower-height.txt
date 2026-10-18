@@ -1,0 +1,3 @@
+Eiffel Tower fact sheet (ClaimCourt e2e fixture, a stable page used instead of a live encyclopedia page).
+The Eiffel Tower in Paris has a current total height of 330 metres (1,083 ft) including its broadcast antennas.
+Its roof height, without antennas, is 300 metres. The tower is therefore taller than 320 metres including its antennas.
