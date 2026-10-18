@@ -50,9 +50,9 @@ function save(extra = {}) {
     JSON.stringify({ network: "studionet", address, wallets: W, steps, checks, ...extra }, null, 2) + "\n");
 }
 
-const EIFFEL = "https://en.wikipedia.org/wiki/Eiffel_Tower";
-const CLAIM_TXT = "Respondent bet me 10 points that the Eiffel Tower in Paris is taller than 320 metres including its antennas, and refuses to pay although the public encyclopedia entry states its current height.";
-const STMT_C = "The Wikipedia article on the Eiffel Tower states a height of about 330 metres including antennas, which is more than 320 metres.";
+const EIFFEL = "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/e2e/tower-height.txt"; // stable fixture: live encyclopedia pages differ between validator fetches, so their snapshot hashes would not reach consensus
+const CLAIM_TXT = "Respondent bet me 10 points that the Eiffel Tower in Paris is taller than 320 metres including its antennas, and refuses to pay although the public fact sheet states its current height.";
+const STMT_C = "The fact sheet cited as my exhibit states a height of about 330 metres including antennas, which is more than 320 metres.";
 const STMT_R = "I believe the tower is only 300 metres tall as originally built, so I do not owe the bet.";
 const file = (title, urls, { rw = 300, rt = 900, aw = 60, at = 900, stake = 100 } = {}) =>
   write(`file: ${title}`, "A", "file_case", [title, CLAIM_TXT, "Respondent pays the 10 point bet", "OTHER", W.B, STMT_C, urls, stake, rw, rt, aw, at]);
@@ -86,19 +86,24 @@ const respondedAt = now();
 const idMain = await total();
 await file("Eiffel bet - full path", [EIFFEL], { aw: 600, at: 900 });
 await respond(idMain);
+const snaps = await read("get_snapshots", [idMain]);
+check("evidence snapshot stored at filing + response (sha256 + excerpt per exhibit)", snaps.length === 2 && snaps.every((x) => /^[0-9a-f]{64}$/.test(x.sha256) && x.excerpt.length > 0),
+  snaps.map((x) => ({ who: x.who, url: x.url, sha256: x.sha256, excerpt_chars: x.excerpt.length })));
 await write("rule (AI validators read both sides' evidence)", "A", "rule", [idMain]);
 c = await read("get_case", [idMain]);
 const ev1 = await read("get_evidence", [idMain]);
 console.log("ruling:", c.ruling, ev1[0]?.evidence_quote);
+check("unchanged evidence is not flagged as changed", c.evidence_changed === false && ev1[0].evidence_changed.length === 0, { evidence_changed: c.evidence_changed });
 check("ruling issued with quote + reasoning", c.status === "RULED" && ["CLAIMANT", "RESPONDENT", "INCONCLUSIVE"].includes(c.ruling) && ev1.length === 1 && ev1[0].reasoning.length > 0,
   { ruling: c.ruling, quote: ev1[0]?.evidence_quote, source: ev1[0]?.source_url });
 const prevailing = c.ruling === "CLAIMANT" ? "A" : c.ruling === "RESPONDENT" ? "B" : null;
 const appellant = prevailing === "A" ? "B" : "A";
 await write("appeal by prevailing party reverts", prevailing || "A", "appeal", [idMain, "I won the first round but appeal anyway to test the guard.", ""], { expectFail: prevailing !== null });
-await write(`appeal by ${appellant} (bond 100)`, appellant, "appeal", [idMain, "Please re-examine the encyclopedia entry; the first ruling misread the stated height of the tower.", EIFFEL.replace("Eiffel_Tower", "Eiffel_Tower#Height")]);
+await write(`appeal by ${appellant} (bond 100)`, appellant, "appeal", [idMain, "Please re-examine the fact sheet; the first ruling misread the stated height of the tower.", EIFFEL + "#height"]);
 await write("rule_appeal (stricter second round)", "A", "rule_appeal", [idMain]);
 c = await read("get_case", [idMain]);
 const ev2 = await read("get_evidence", [idMain]);
+check("appeal bond outcome is consistent", c.appeal_bond_outcome === (c.appeal_result === "UPHELD" && c.first_ruling !== "INCONCLUSIVE" ? "FORFEITED" : "RETURNED"), { first: c.first_ruling, result: c.appeal_result, bond: c.appeal_bond_outcome });
 check("appeal settled case", c.status === "FINAL" && ["OVERTURNED", "UPHELD"].includes(c.appeal_result) && ev2.length === 2, { ruling: c.ruling, appeal: c.appeal_result });
 
 // ---- 4. second full case without appeal: wait for the window, finalize

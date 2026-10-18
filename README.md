@@ -7,7 +7,7 @@ A party who did not prevail can appeal once, for a bond, under a stricter standa
 
 - Network: GenLayer **Studionet** (chain ID 61999, RPC `https://studio.genlayer.com/api`, gasless)
 - Live app: https://claimcourt-dikacreams-projects.vercel.app
-- Contract: [`contracts/claimcourt.py`](contracts/claimcourt.py), deployed at `0x19A938d1A7d10f98C07e54Cf4Da6944028074F47`
+- Contract: [`contracts/claimcourt.py`](contracts/claimcourt.py), deployed at `0x72A5063875Bb25f8CF450eFe3710671de5bEF0aE`
 - Frontend: Next.js 16 + Tailwind 4 + MetaMask, an "editorial paper docket" design (`frontend/`)
 - Stakes are **points with no monetary value** (1,000 free starting points per wallet)
 
@@ -43,7 +43,7 @@ flowchart LR
    **dismiss frivolous or vague cases before any stake is taken**.
 2. **Answer.** The named respondent matches the stake and files a statement and 1–3 URLs before `respond_by`. No answer, then `expire` voids the case and refunds the claimant.
 3. **Rule.** Anyone calls `rule`. The leader and validators fetch every exhibit; a ruling for either side must cite a **verbatim quote** that exists on a submitted page, otherwise it is `INCONCLUSIVE`.
-4. **Appeal.** The non-prevailing party may appeal within the window for a **100-point bond** (plus one optional new exhibit). `rule_appeal` runs a **stricter second round**. A changed ruling returns the bond; an upheld ruling **forfeits the bond to the other party**.
+4. **Appeal.** The non-prevailing party may appeal within the window for a **100-point bond** (plus one optional new exhibit). `rule_appeal` runs a **stricter second round**. A changed ruling returns the bond; an upheld ruling for a side **forfeits the bond to that party** (if the first ruling was INCONCLUSIVE and stays so, the bond is returned). Exhibits are **snapshotted** (sha256 + 2,000-char excerpt, by validator consensus) when filed, answered or added on appeal; at ruling time a page that no longer matches its hash is judged from the stored excerpt and flagged.
 5. **Settle.** Winner takes both stakes; inconclusive returns each stake. `finalize` after the appeal window.
 6. **Timeouts.** No answer, no ruling, or no appeal decision before the deadline: `expire` (callable by anyone) voids the case and refunds stakes (and the bond).
 
@@ -68,9 +68,9 @@ Full document: **[docs/TRUST_MODEL.md](docs/TRUST_MODEL.md)**. Summary:
   checks the quoted sentence **literally appears there**, re-runs the judgment itself and agrees only if the **ruling label matches**. Free-text reasoning is not compared.
   Anything without a verifiable quote is downgraded to `INCONCLUSIVE`, which refunds both sides, so doubt never moves value.
 - **Disagreement.** No majority means no ruling is stored; the ruling deadline then lets anyone `expire` the case and refund both stakes.
-- **Challenge.** One bonded, stricter appeal (change the ruling only on clear and convincing evidence with a verbatim quote). Wrong appellants lose the bond.
+- **Challenge.** One bonded, stricter appeal (change the ruling only on clear and convincing evidence with a verbatim quote). Wrong appellants lose the bond (except inconclusive-on-inconclusive, refunded). All party text, appeal grounds and the first ruling's quote/reasoning are fenced as untrusted data.
 - **Attack scenarios** (prompt injection, evidence swapping, ruling-time manipulation, sybil, collusion, stalling) are tabulated with mitigations and gaps in section 5b of the trust model.
-- **Residual risks** (mutable pages, model error, prompt injection, colluding wallets, testnet validators) are listed honestly in the trust model.
+- **Residual risks** (snapshot limits and unstable pages, model error, prompt injection that fencing reduces but cannot remove, colluding wallets, testnet validators) are listed honestly in the trust model, with what is now fixed versus still open.
 
 ## Development
 
@@ -88,7 +88,7 @@ cd frontend && npm install && npm run dev     # NEXT_PUBLIC_CONTRACT_ADDRESS in 
 ```
 
 The e2e script exercises on Studionet with two wallets: frivolous filing rejected, file → respond → rule → appeal → settle,
-file → respond → rule → finalize, no-response timeout, ruling timeout, and appeal timeout, then checks points conservation.
+file → respond → rule → finalize, no-response timeout, ruling timeout, and appeal timeout, then checks points conservation. `npm run e2e:overturn` (appeal flips the ruling) and `node scripts/e2e-changed.mjs file|rule` (an exhibit edited after the snapshot) cover the other two scenarios.
 
 ## License
 

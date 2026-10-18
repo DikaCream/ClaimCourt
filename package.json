@@ -9,6 +9,8 @@
     "schema": "node scripts/schema-check.mjs",
     "deploy:studionet": "node scripts/deploy.mjs",
     "e2e:studionet": "node scripts/e2e.mjs",
+    "e2e:overturn": "node scripts/e2e-overturn.mjs",
+    "e2e:changed": "node scripts/e2e-changed.mjs",
     "lint:contract": "genvm-lint check contracts/claimcourt.py",
     "test:contract": "pytest tests/direct/ -v",
     "dev": "cd frontend && npm run dev",
