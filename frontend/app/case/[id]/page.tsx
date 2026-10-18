@@ -11,7 +11,7 @@ import { useCase, useEvidence, useNow, useTx } from "@/lib/hooks";
 import { useWallet } from "@/lib/WalletProvider";
 import type { CourtCase, Round } from "@/lib/claimcourt";
 
-function Party({ role, addr, statement, urls, tone }: { role: string; addr: string; statement: string; urls: string[]; tone: string }) {
+function Party({ role, addr, statement, urls, tone, hashes }: { role: string; addr: string; statement: string; urls: string[]; tone: string; hashes: Record<string, string> }) {
   return (
     <div className="pleading p-4">
       <p className={`label ${tone}`}>{role}</p>
@@ -25,6 +25,7 @@ function Party({ role, addr, statement, urls, tone }: { role: string; addr: stri
               <li key={u} className="typed text-[13px]">
                 <span className="font-bold">{role[0]}-{i + 1}</span>{" "}
                 <a className="ink-link break-all" href={u} target="_blank" rel="noreferrer">{host(u)}{new URL(u).pathname.slice(0, 40)}</a>
+                {hashes[u] && <span className="block text-[11px] text-ink-2" title={hashes[u]}>snapshot sha256 {hashes[u].slice(0, 12)}…</span>}
               </li>
             ))}
           </ul>
@@ -63,6 +64,11 @@ function Findings({ rounds }: { rounds: Round[] }) {
                 quoted from <a className="ink-link" href={r.source_url} target="_blank" rel="noreferrer">{r.source_url}</a>
               </footer>
             </blockquote>
+          )}
+          {r.evidence_changed && r.evidence_changed.length > 0 && (
+            <p className="typed mt-3 border-2 border-stamp p-2 text-[12px] font-bold text-stamp">
+              Evidence changed since the filing snapshot: {r.evidence_changed.map(host).join(" · ")}. Those exhibits were judged from the stored snapshot excerpt, not the live page.
+            </p>
           )}
           {r.sources.length > 0 && <p className="typed mt-3 text-[11px] text-ink-2">Exhibits read: {r.sources.map(host).join(" · ")}</p>}
         </article>
@@ -126,7 +132,7 @@ function Motions({ c }: { c: CourtCase }) {
       items.push(
         <div key="rule">
           <button className="btn btn-red" disabled={!ok || tx.busy} onClick={() => tx.run("rule", [id])}>{busyLabel("Call the ruling")}</button>
-          <p className="mt-2 text-[14px] italic text-ink-2">Anyone may call it. Validators will fetch every exhibit; this takes about a minute.</p>
+          <p className="mt-2 text-[14px] italic text-ink-2">Anyone may call it. Validators compare every exhibit with its filing-time snapshot first; this takes about a minute.</p>
         </div>,
       );
     } else {
@@ -143,7 +149,7 @@ function Motions({ c }: { c: CourtCase }) {
         <div key="app" className="pleading p-4">
           <p className="font-display text-xl font-semibold">Notice of appeal</p>
           <p className="text-[15px] italic text-ink-2">
-            Bond: {APPEAL_BOND} points. If the second, stricter round upholds the ruling you forfeit the bond to the other party; if it changes the ruling you get it back.
+            Bond: {APPEAL_BOND} points. If the second, stricter round upholds a ruling for the other side you forfeit the bond to them; if it changes the ruling you get it back. Appealing an INCONCLUSIVE ruling cannot lose the bond: it is returned if the second round is inconclusive too.
           </p>
           <textarea className="field mt-3" rows={3} maxLength={500} value={reason} onChange={(e) => setReason(e.target.value)} placeholder="Grounds of appeal (20–500 characters)" />
           <input className="field mt-2" placeholder="Optional new exhibit https://…" value={extra} onChange={(e) => setExtra(e.target.value)} spellCheck={false} />
@@ -196,6 +202,7 @@ export default function CasePage() {
   const c = q.data;
   const ev = useEvidence(Number.isInteger(id) ? id : null, c?.rounds ?? 0);
   const now = useNow();
+  const hashes: Record<string, string> = Object.fromEntries((c?.snapshots ?? []).map((s) => [s.url, s.sha256]));
   if (q.isLoading) return <p className="py-10 typed animate-pulse">The clerk is pulling the file…</p>;
   if (!Number.isInteger(id) || id < 0) return <p className="py-10 typed text-stamp">That is not a case number. <Link href="/" className="ink-link">Back to the docket</Link></p>;
   if (q.error || !c) return <p className="py-10 typed text-stamp">Could not load case {id}: {q.error ? String((q.error as Error).message).slice(0, 160) : "no such case"}. <Link href="/" className="ink-link">Back to the docket</Link></p>;
@@ -234,8 +241,8 @@ export default function CasePage() {
 
       <SectionTitle n="II.">Pleadings &amp; exhibits</SectionTitle>
       <div className="grid gap-6 md:grid-cols-2">
-        <Party role="Claimant" addr={c.claimant} statement={c.claimant_statement} urls={c.claimant_evidence} tone="text-navy" />
-        <Party role="Respondent" addr={c.respondent} statement={c.respondent_statement} urls={c.respondent_evidence} tone="text-ochre" />
+        <Party role="Claimant" addr={c.claimant} statement={c.claimant_statement} urls={c.claimant_evidence} tone="text-navy" hashes={hashes} />
+        <Party role="Respondent" addr={c.respondent} statement={c.respondent_statement} urls={c.respondent_evidence} tone="text-ochre" hashes={hashes} />
       </div>
 
       {(c.status === "VOID" || c.appellant) && (
@@ -249,7 +256,7 @@ export default function CasePage() {
               {c.appeal_evidence.map((u) => <p key={u} className="typed mt-1 text-[12px]">New exhibit: <a className="ink-link" href={u} target="_blank" rel="noreferrer">{u}</a></p>)}
               {c.appeal_result && (
                 <p className="typed mt-2 text-[13px] font-bold">
-                  {c.appeal_result === "OVERTURNED" ? "Ruling changed on appeal. Bond returned." : "Ruling upheld. Bond forfeited to the other party."}
+                  {c.appeal_result === "OVERTURNED" ? "Ruling changed on appeal. Bond returned." : c.appeal_bond_outcome === "RETURNED" ? "Ruling upheld (still inconclusive). Bond returned to the appellant." : "Ruling upheld. Bond forfeited to the other party."}
                 </p>
               )}
             </div>

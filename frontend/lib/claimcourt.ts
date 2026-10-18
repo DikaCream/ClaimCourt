@@ -45,6 +45,9 @@ export interface CourtCase {
   appeal_result: "" | "OVERTURNED" | "UPHELD";
   final_at: number;
   rounds: number;
+  evidence_changed: boolean;
+  snapshots: { url: string; sha256: string; excerpt_chars: number }[];
+  appeal_bond_outcome: "" | "RETURNED" | "FORFEITED";
 }
 
 export interface Round {
@@ -54,6 +57,7 @@ export interface Round {
   source_url: string;
   reasoning: string;
   sources: string[];
+  evidence_changed: string[];
   caller: string;
   timestamp: number;
 }
