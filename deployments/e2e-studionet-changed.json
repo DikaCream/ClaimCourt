@@ -1,0 +1,182 @@
+{
+  "network": "studionet",
+  "address": "0x72A5063875Bb25f8CF450eFe3710671de5bEF0aE",
+  "wallets": {
+    "A": "0xBb9E609bf277a0Ffb0018515d0a850037C2b17c3",
+    "B": "0x4114320e6217407814992C42DC4573ea85A00b60"
+  },
+  "caseId": 2,
+  "steps": [
+    {
+      "step": "file case (late sticker order)",
+      "wallet": "A",
+      "method": "file_case",
+      "tx": "0xff1a6a8f3eecd0dd77afbb4963ac587475d3852db692098282c09ac840c0f92c",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xff1a6a8f3eecd0dd77afbb4963ac587475d3852db692098282c09ac840c0f92c",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true
+    },
+    {
+      "step": "respond (answer with the version-1 note)",
+      "wallet": "B",
+      "method": "respond",
+      "tx": "0x6417c4da707f345e1f2f38524bda5b08eed0119dd8a2bbfd0d4ba842861303fc",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x6417c4da707f345e1f2f38524bda5b08eed0119dd8a2bbfd0d4ba842861303fc",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true
+    },
+    {
+      "step": "rule (validators compare live pages with the stored snapshot)",
+      "wallet": "A",
+      "method": "rule",
+      "tx": "0x0f1efe52b7fdb38f9aaf3911f76ba8db4a4cddacab2c06b0b0cb43dbf0f28e0e",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x0f1efe52b7fdb38f9aaf3911f76ba8db4a4cddacab2c06b0b0cb43dbf0f28e0e",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true
+    }
+  ],
+  "checks": [
+    {
+      "check": "snapshots stored for both exhibits",
+      "pass": true,
+      "detail": [
+        {
+          "who": "CLAIMANT",
+          "url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/changed/claimant-order-log.txt",
+          "sha256": "a02a4f8957eae4986a9ded4ecd73378162e63c8a1e7e82512ff0f95b7fb7690b",
+          "excerpt": "Studio Lanna order log (ClaimCourt e2e fixture). Order 4417: 200 printed stickers for a customer. Promised delivery date: 2026-10-01. Status on 2026-10-02: NOT DELIVERED, the parcel is still at the studio. Late-delivery policy: the 50 point deposit is refunded in full if the order is not delivered by the promised date."
+        },
+        {
+          "who": "RESPONDENT",
+          "url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/changed/respondent-note.txt",
+          "sha256": "db27544d4c4ebd25aa27ccd7bfab7c1e91b3368635cabeec7959084cb96b5077",
+          "excerpt": "Studio Lanna customer note (ClaimCourt e2e fixture, version 1, as it stood when the respondent answered). We are a small studio and delivery dates are estimates. Refund requests are handled case by case."
+        }
+      ]
+    },
+    {
+      "check": "respondent page now differs from the snapshot (version 2 is live)",
+      "pass": true,
+      "detail": {
+        "head": "Studio Lanna customer note (ClaimCourt e2e fixture, version 2, edited after the "
+      }
+    },
+    {
+      "check": "ruling flagged evidence_changed with the respondent exhibit listed",
+      "pass": true,
+      "detail": {
+        "evidence_changed": true,
+        "listed": [
+          "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/changed/respondent-note.txt"
+        ]
+      }
+    },
+    {
+      "check": "edited page did not win: ruling is not RESPONDENT",
+      "pass": true,
+      "detail": {
+        "ruling": "CLAIMANT",
+        "quote": "Late-delivery policy: the 50 point deposit is refunded in full if the order is not delivered by the promised date.",
+        "source": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/changed/claimant-order-log.txt"
+      }
+    },
+    {
+      "check": "quote (if any) comes from the stored snapshot, not from the edited page",
+      "pass": true,
+      "detail": {
+        "quote": "Late-delivery policy: the 50 point deposit is refunded in full if the order is not delivered by the promised date."
+      }
+    }
+  ],
+  "snapshots": [
+    {
+      "excerpt": "Studio Lanna order log (ClaimCourt e2e fixture). Order 4417: 200 printed stickers for a customer. Promised delivery date: 2026-10-01. Status on 2026-10-02: NOT DELIVERED, the parcel is still at the studio. Late-delivery policy: the 50 point deposit is refunded in full if the order is not delivered by the promised date.",
+      "sha256": "a02a4f8957eae4986a9ded4ecd73378162e63c8a1e7e82512ff0f95b7fb7690b",
+      "url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/changed/claimant-order-log.txt",
+      "who": "CLAIMANT"
+    },
+    {
+      "excerpt": "Studio Lanna customer note (ClaimCourt e2e fixture, version 1, as it stood when the respondent answered). We are a small studio and delivery dates are estimates. Refund requests are handled case by case.",
+      "sha256": "db27544d4c4ebd25aa27ccd7bfab7c1e91b3368635cabeec7959084cb96b5077",
+      "url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/changed/respondent-note.txt",
+      "who": "RESPONDENT"
+    }
+  ],
+  "case": {
+    "appeal_bond_outcome": "",
+    "appeal_due": 0,
+    "appeal_ends": 1792332170,
+    "appeal_evidence": [],
+    "appeal_open": true,
+    "appeal_reason": "",
+    "appeal_result": "",
+    "appeal_timeout": 900,
+    "appeal_window": 600,
+    "appealed_at": 0,
+    "appellant": "",
+    "category": "SERVICE",
+    "claim": "Studio Lanna promised to deliver order 4417 (200 printed stickers) by 2026-10-01 and its order log states the 50 point deposit is refunded in full if the order is late. The order log shows the order was not delivered.",
+    "claimant": "0xBb9E609bf277a0Ffb0018515d0a850037C2b17c3",
+    "claimant_evidence": [
+      "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/changed/claimant-order-log.txt"
+    ],
+    "claimant_statement": "The studio's own order log shows order 4417 was promised for 2026-10-01, is still not delivered, and carries a full refund policy for late orders.",
+    "evidence_changed": true,
+    "filed_at": 1792331170,
+    "final_at": 0,
+    "first_ruling": "CLAIMANT",
+    "id": 2,
+    "pot": 100,
+    "reject_reason": "",
+    "relief": "Respondent refunds the 50 point deposit",
+    "respond_by": 1792331770,
+    "responded_at": 1792331216,
+    "respondent": "0x4114320e6217407814992C42DC4573ea85A00b60",
+    "respondent_evidence": [
+      "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/changed/respondent-note.txt"
+    ],
+    "respondent_statement": "Delivery dates are only estimates and refunds are handled case by case, so no automatic refund is owed.",
+    "rounds": 1,
+    "ruled_at": 1792331570,
+    "ruling": "CLAIMANT",
+    "ruling_due": 1792334816,
+    "ruling_timeout": 3600,
+    "snapshots": [
+      {
+        "excerpt_chars": 320,
+        "sha256": "a02a4f8957eae4986a9ded4ecd73378162e63c8a1e7e82512ff0f95b7fb7690b",
+        "url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/changed/claimant-order-log.txt"
+      },
+      {
+        "excerpt_chars": 203,
+        "sha256": "db27544d4c4ebd25aa27ccd7bfab7c1e91b3368635cabeec7959084cb96b5077",
+        "url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/changed/respondent-note.txt"
+      }
+    ],
+    "stake": 50,
+    "status": "RULED",
+    "title": "Sticker order 4417 not delivered, refund due",
+    "void_reason": ""
+  },
+  "rounds": [
+    {
+      "caller": "0xBb9E609bf277a0Ffb0018515d0a850037C2b17c3",
+      "evidence_changed": [
+        "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/changed/respondent-note.txt"
+      ],
+      "evidence_quote": "Late-delivery policy: the 50 point deposit is refunded in full if the order is not delivered by the promised date.",
+      "kind": "INITIAL",
+      "reasoning": "The claimant's evidence explicitly states a full refund policy for late orders, and the order was not delivered by the promised date. The respondent's note does not override the clear terms in the order log.",
+      "ruling": "CLAIMANT",
+      "source_url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/changed/claimant-order-log.txt",
+      "sources": [
+        "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/changed/claimant-order-log.txt",
+        "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/changed/respondent-note.txt"
+      ],
+      "timestamp": 1792331570
+    }
+  ]
+}

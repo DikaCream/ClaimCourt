@@ -1,1 +1,123 @@
-{"network": "studionet", "address": "0x19A938d1A7d10f98C07e54Cf4Da6944028074F47", "wallets": {"A": "0xBb9E609bf277a0Ffb0018515d0a850037C2b17c3", "B": "0x4114320e6217407814992C42DC4573ea85A00b60"}, "note": "Appeal-overturn scenario runs on Studionet, produced by scripts/e2e-overturn.mjs (VARIANT=a|b).", "overturnRuns": [{"variant": "a", "when": "2026-10-15T03:53:57.075Z", "case_id": 6, "evidence_urls": {"claimant": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/overturn/a-claimant-invoice.txt", "respondent": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/overturn/a-respondent-delivery.txt", "appeal_extra": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/overturn/a-appeal-correction.txt"}, "first_ruling": "INCONCLUSIVE", "final_ruling": "CLAIMANT", "appeal_result": "OVERTURNED", "status": "FINAL", "steps": [{"step": "file case", "wallet": "A", "method": "file_case", "tx": "0xe6338f468401dec3979c827ba79c2d34327a21ede6aba9be322eb302507b4687", "status": "ACCEPTED", "execution": "SUCCESS"}, {"step": "respond", "wallet": "B", "method": "respond", "tx": "0xcf708d17422549f102e174538b60e58c0f926d22f72edb00ba04a76ec815a84f", "status": "ACCEPTED", "execution": "SUCCESS"}, {"step": "rule (first round)", "wallet": "A", "method": "rule", "tx": "0xd9ebbaa2abdcdb77d068c25643a4dca7a61d0ebaf54ebaafd732f0c5ba3ccbf0", "status": "ACCEPTED", "execution": "SUCCESS"}, {"step": "appeal with correction notice", "wallet": "A", "method": "appeal", "tx": "0x0f942c7d6916d2a2d9ba3e54f1bfa7c98916e8b90b62a45af6f9537e91439aef", "status": "ACCEPTED", "execution": "SUCCESS"}, {"step": "rule_appeal (stricter round)", "wallet": "A", "method": "rule_appeal", "tx": "0x7d8ba8ff9d470a4972e370b92e0b63affa5a93a2fc04ec6cdf646a0c7e8ab214", "status": "ACCEPTED", "execution": "SUCCESS"}], "rounds": [{"kind": "INITIAL", "ruling": "INCONCLUSIVE", "evidence_quote": "Entry carries no order number in this extract.", "reasoning": "The claimant's evidence shows a promised delivery date and refund policy, but it does not prove non-delivery. The respondent's evidence shows a delivery to a client with initials matching the claimant, but because the extract does not identify order #4417, the evidence conflicts and does not conclusively resolve the dispute."}, {"kind": "APPEAL", "ruling": "CLAIMANT", "evidence_quote": "Order #4417 (client Alex Rivers) was NOT delivered: the parcel was returned to the sender on 2026-10-02 as undeliverable and has stayed in the sender's warehouse since.", "reasoning": "The courier's correction notice clarifies that the previous delivery log entry was misattributed to order #4418 and confirms order #4417 was never delivered. Since the work order log guarantees a refund for late or non-delivery, the claimant is entitled to the 50 point deposit."}]}, {"variant": "b", "when": "2026-10-15T03:55:56.095Z", "case_id": 7, "evidence_urls": {"claimant": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/overturn/b-claimant-invoice.txt", "respondent": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/overturn/b-respondent-delivery.txt", "appeal_extra": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/overturn/b-appeal-correction.txt"}, "first_ruling": "RESPONDENT", "final_ruling": "CLAIMANT", "appeal_result": "OVERTURNED", "status": "FINAL", "steps": [{"step": "file case", "wallet": "A", "method": "file_case", "tx": "0xea669ad012d143c2b52bbed3f465b0152fa976a4b19c73e89b3a454e29b53bd0", "status": "ACCEPTED", "execution": "SUCCESS"}, {"step": "respond", "wallet": "B", "method": "respond", "tx": "0x21d5ae5ad28e26f30b7195989d6994d803ab6f473a34784fda4cf459ce64f5f9", "status": "ACCEPTED", "execution": "SUCCESS"}, {"step": "rule (first round)", "wallet": "A", "method": "rule", "tx": "0x6b97ee5bd3051cce61719557535c62c43ee09b096e059d19e78246ea34fc0817", "status": "ACCEPTED", "execution": "SUCCESS"}, {"step": "appeal with correction notice", "wallet": "A", "method": "appeal", "tx": "0xe0ea267824d97916ae8e9923ae90ee2c3763dbccf3612ee414b7a6a4e376cabb", "status": "ACCEPTED", "execution": "SUCCESS"}, {"step": "rule_appeal (stricter round)", "wallet": "A", "method": "rule_appeal", "tx": "0x70391b7d9bc147a76549550e90891cdebf930c441b730e9fa4d9719b80ae4c05", "status": "ACCEPTED", "execution": "SUCCESS"}], "rounds": [{"kind": "INITIAL", "ruling": "RESPONDENT", "evidence_quote": "Status: DELIVERED on time on 2026-10-01.", "reasoning": "The respondent provided a courier log specifically referencing order #4417 as delivered on the promised date. This evidence refutes the claimant's assertion that the goods never arrived."}, {"kind": "APPEAL", "ruling": "CLAIMANT", "evidence_quote": "Order #4417 (client Alex Rivers) was NOT delivered: the parcel was returned to the sender on 2026-10-02 as undeliverable and has stayed in the sender's warehouse since.", "reasoning": "On appeal, the courier's correction notice directly identifies the earlier delivery entry as a mistyped reference for a different order and specifically states that order #4417 was not delivered. That clearly and convincingly overturns the prior reliance on the original delivery log and supports refunding the deposit under the stated late-delivery refund policy."}]}]}
+{
+  "network": "studionet",
+  "address": "0x72A5063875Bb25f8CF450eFe3710671de5bEF0aE",
+  "wallets": {
+    "A": "0xBb9E609bf277a0Ffb0018515d0a850037C2b17c3",
+    "B": "0x4114320e6217407814992C42DC4573ea85A00b60"
+  },
+  "overturnRuns": [
+    {
+      "variant": "a",
+      "when": "2026-10-18T14:01:36.039Z",
+      "case_id": 9,
+      "evidence_urls": {
+        "claimant": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/overturn/a-claimant-invoice.txt",
+        "respondent": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/overturn/a-respondent-delivery.txt",
+        "appeal_extra": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/overturn/a-appeal-correction.txt"
+      },
+      "first_ruling": "INCONCLUSIVE",
+      "final_ruling": "CLAIMANT",
+      "appeal_result": "OVERTURNED",
+      "status": "FINAL",
+      "steps": [
+        {
+          "step": "file case (delivery dispute)",
+          "wallet": "A",
+          "method": "file_case",
+          "tx": "0xc40fab12bff3fb6fd8975fa7f7555606e88c9ee206a2e07669974cc9456c7d0d",
+          "explorer": "https://explorer-studio.genlayer.com/transactions/0xc40fab12bff3fb6fd8975fa7f7555606e88c9ee206a2e07669974cc9456c7d0d",
+          "status": "ACCEPTED",
+          "execution": "SUCCESS",
+          "ok": true
+        },
+        {
+          "step": "respond (courier log as proof of delivery)",
+          "wallet": "B",
+          "method": "respond",
+          "tx": "0xc19c0342c02c433b849df5d441def10c07fd370ca7a2d4373d4e7e8281b5c057",
+          "explorer": "https://explorer-studio.genlayer.com/transactions/0xc19c0342c02c433b849df5d441def10c07fd370ca7a2d4373d4e7e8281b5c057",
+          "status": "ACCEPTED",
+          "execution": "SUCCESS",
+          "ok": true
+        },
+        {
+          "step": "rule (first round)",
+          "wallet": "A",
+          "method": "rule",
+          "tx": "0x54e47411ebc480fc8727eb96f6fd1af0e6161cd54bd7b6dcf4220fcaa1db9e31",
+          "explorer": "https://explorer-studio.genlayer.com/transactions/0x54e47411ebc480fc8727eb96f6fd1af0e6161cd54bd7b6dcf4220fcaa1db9e31",
+          "status": "ACCEPTED",
+          "execution": "SUCCESS",
+          "ok": true
+        },
+        {
+          "step": "appeal by A with correction notice",
+          "wallet": "A",
+          "method": "appeal",
+          "tx": "0x89a7a0d18f37a2cb90f04e54ded9010260901e13c6963c593099c870e1f7c1ba",
+          "explorer": "https://explorer-studio.genlayer.com/transactions/0x89a7a0d18f37a2cb90f04e54ded9010260901e13c6963c593099c870e1f7c1ba",
+          "status": "ACCEPTED",
+          "execution": "SUCCESS",
+          "ok": true
+        },
+        {
+          "step": "rule_appeal (stricter round)",
+          "wallet": "A",
+          "method": "rule_appeal",
+          "tx": "0xb720fd178c6f0316388e24f889ee2110620333ac3997b07e0134f3a2624e39f4",
+          "explorer": "https://explorer-studio.genlayer.com/transactions/0xb720fd178c6f0316388e24f889ee2110620333ac3997b07e0134f3a2624e39f4",
+          "status": "ACCEPTED",
+          "execution": "SUCCESS",
+          "ok": true
+        }
+      ],
+      "rounds": [
+        {
+          "caller": "0xBb9E609bf277a0Ffb0018515d0a850037C2b17c3",
+          "evidence_changed": [],
+          "evidence_quote": "Entry carries no order number in this extract.",
+          "kind": "INITIAL",
+          "reasoning": "The claimant provided evidence of the order and refund policy, while the respondent provided a delivery log for the same date and address. However, the respondent's evidence does not specify an order number, making it impossible to definitively link the delivery to order #4417.",
+          "ruling": "INCONCLUSIVE",
+          "source_url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/overturn/a-respondent-delivery.txt",
+          "sources": [
+            "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/overturn/a-claimant-invoice.txt",
+            "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/overturn/a-respondent-delivery.txt"
+          ],
+          "timestamp": 1792332011
+        },
+        {
+          "caller": "0xBb9E609bf277a0Ffb0018515d0a850037C2b17c3",
+          "evidence_changed": [],
+          "evidence_quote": "Order #4417 (client Alex Rivers) was NOT delivered: the parcel was returned to the sender on 2026-10-02 as undeliverable and has stayed in the sender's warehouse since.",
+          "kind": "APPEAL",
+          "reasoning": "The claimant's invoice establishes the order, deposit, promised date, and refund policy for late delivery. The courier's correction notice clearly and convincingly shows order #4417 was not delivered and the earlier delivery entry belonged to a different order, so the refund condition is met.",
+          "ruling": "CLAIMANT",
+          "source_url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/overturn/a-appeal-correction.txt",
+          "sources": [
+            "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/overturn/a-claimant-invoice.txt",
+            "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/overturn/a-respondent-delivery.txt",
+            "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/overturn/a-appeal-correction.txt"
+          ],
+          "timestamp": 1792332068
+        }
+      ],
+      "stats": {
+        "appeals": 3,
+        "by_status": {
+          "APPEALED": 0,
+          "AWAITING_RESPONSE": 1,
+          "FINAL": 3,
+          "READY": 0,
+          "REJECTED": 2,
+          "RULED": 1,
+          "VOID": 3
+        },
+        "cases": 10,
+        "overturned": 1,
+        "total_staked": 1200,
+        "users": 2
+      }
+    }
+  ]
+}
