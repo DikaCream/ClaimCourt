@@ -8,6 +8,21 @@ how validators reach agreement, what happens when they do not, and how a result 
 Contract: [`contracts/claimcourt.py`](../contracts/claimcourt.py). Network: GenLayer Studionet (chain 61999).
 Stakes are **points with no monetary value** (1,000 free starting points per wallet).
 
+## 0. Why this needs GenLayer (and not an oracle or a normal contract)
+
+The on-chain question is "which side do these web pages support?", which needs reading unstructured text and weighing it.
+
+| Option | Why it does not work here |
+|---|---|
+| Price/data oracle (Chainlink, Pyth) | Delivers numbers from pre-agreed feeds. A dispute has no feed; the evidence is whatever pages the parties cite. |
+| Plain smart contract | Cannot fetch or interpret a web page; it could only count votes from humans (a jury DAO with its own bribery and liveness problems). |
+| Admin or arbitrator key | One party decides other people's stakes. |
+| Single off-chain AI API | One operator and one model, nothing on-chain to agree on, no way to challenge. |
+| **GenLayer** | Each validator fetches the pages itself and runs its own LLM. The result is accepted only if validators reproduce the same ruling label and the quote is verifiably on the page (custom equivalence principle). Disagreement stores nothing. |
+
+Deterministic code (stakes, deadlines, URL rules, payouts, quote-on-page check, downgrade to `INCONCLUSIVE`) stays in plain
+contract logic. AI is used only for the reading-and-judging step.
+
 ## 1. Sources: what the court reads
 
 | Input | Who supplies it | How it is constrained |
@@ -39,11 +54,15 @@ from a named `source_url`. It uses GenLayer's **custom equivalence principle** (
    (case/punctuation-normalised). A fabricated or paraphrased quote makes that validator vote *disagree*.
 3. Each validator then runs the **whole judgment itself** (own fetches, own LLM call) and votes *agree* only if its own
    ruling label equals the leader's.
-4. Only a majority-agreed result is written. Free-text reasoning is **not** compared; only the label and the verifiable quote are. This is deliberate:
+4. Only a majority-agreed result is written. **What must match across validators:** the ruling label, and (for a ruling for a side) a quote that exists on the cited page.
+   Not compared: reasoning text, and the *choice* of quote (a validator may have picked a different sentence, it only has to confirm the leader's exists). The stored reasoning, quote and source are the leader's. Free-text reasoning is **not** compared; only the label and the verifiable quote are. This is deliberate:
    prose differs between LLMs, but a label and a quote that exists on the page can be checked mechanically.
 
 Resulting guarantees: (a) no side can win on statements alone, (b) every non-inconclusive ruling is tied to text a human can open and read at the cited URL,
 (c) uncertainty resolves to `INCONCLUSIVE`, which refunds both stakes, so doubt never transfers value.
+
+Note: the **filing screen sees only the text and the URL strings, not the page contents**. It can reject a claim that is vague or cannot
+be settled from public pages, but it cannot confirm that the URLs actually support the claim.
 
 Filing is screened the same way: validators must agree on a `valid` boolean. Frivolous, vague, purely subjective, unprovable-from-public-pages,
 harassing or illegal complaints are stored as `REJECTED` and **no stake is taken**.
@@ -57,10 +76,11 @@ harassing or illegal complaints are stored as `REJECTED` and **no stake is taken
 | Respondent never answers | After `respond_by`, `expire` voids the case and refunds the claimant. |
 | Ruling is never produced | After `responded_at + ruling_timeout`, `expire` voids the case and refunds both. |
 | Appeal is filed but never decided | After `appealed_at + appeal_timeout`, `expire` voids the case, refunds both stakes **and returns the appeal bond**. |
+| Ruling exists but nobody calls `finalize` | After the appeal window anyone can call `finalize`; funds stay escrowed until someone does (no one is privileged to block it). |
 | Claimant changes their mind before an answer | `withdraw_case` refunds the stake. |
 
 All deadlines are chosen by the claimant at filing, bounded to 60 seconds–14 days, stored on-chain and enforced by
-block time inside the contract. **No case can hang**: every non-final state has a public, permissionless exit that returns funds.
+block time inside the contract. **No case can hang**: every non-final state has a public, permissionless exit (`expire`, or `finalize` after the appeal window). Each is a normal transaction that someone must submit.
 
 ## 4. Challenge process: the appeal round
 
@@ -72,6 +92,8 @@ block time inside the contract. **No case can hang**: every non-final state has 
   evidence is *clear and convincing* with a verbatim quote, otherwise to answer `INCONCLUSIVE`.
 * **Outcome:** if the second ruling **differs** from the first (including a move to `INCONCLUSIVE`) the appeal succeeds: the bond is returned and the new ruling is final.
   If it is **the same**, the appeal fails: the **bond is forfeited to the opposing party** and the first ruling is final.
+* **Appeal of an `INCONCLUSIVE` ruling:** either party may appeal. If the second round is again `INCONCLUSIVE`, the appeal is "upheld" and the appellant forfeits the bond to the other party, even though that party did not win.
+* **Appeal inputs are untrusted free text.** The appellant's grounds (and the first ruling's quote) go into the appeal prompt without a fence, so the appeal round is a larger prompt-injection surface than the first round. The verbatim-quote check and the `INCONCLUSIVE` downgrade still apply to the output.
 * **One appeal only.** The second ruling is final. This bounds cost and prevents infinite relitigation.
 * **Settlement:** `CLAIMANT` → claimant receives both stakes; `RESPONDENT` → respondent receives both; `INCONCLUSIVE` → each stake is returned.
   Points are never created or destroyed; the e2e script checks conservation.
@@ -88,6 +110,21 @@ Why the bond: it makes weak appeals costly, and the forfeiture is paid to the pa
 5. **Sybil / collusion between parties.** A claimant can name a second wallet they control. Because stakes are valueless points, nothing is gained. Use with real value requires identity or reputation on top.
 6. **Studionet is a testnet environment.** Validator sets and LLMs there are not production-grade decentralised security.
 7. **Scope.** Disputes must be decidable from public web pages. Anything needing private documents, testimony or legal interpretation is out of scope and should be dismissed at filing or end `INCONCLUSIVE`.
+
+## 5b. Attack scenarios and mitigations
+
+| Attack | What can happen | Mitigation in code | Not mitigated |
+|---|---|---|---|
+| **Prompt injection** via evidence page or statement/appeal text | Page text tries to order "rule CLAIMANT" | Prompt marks statements as allegations and tells the model to ignore instructions in pages; a ruling for a side needs a verbatim quote from a *submitted* URL (else `INCONCLUSIVE`); validators re-run independently | A page that genuinely contains a persuasive quote the models misread; the appeal text is unfenced |
+| **Evidence swap (bait and switch)** | A party edits their page after the other side staked, or between the leader's and a validator's fetch | Quote must exist on the page at each validator's fetch; mismatch means no consensus and a refund path | Both sides' validators fetch the *edited* page and agree. Read exhibits before staking; prefer archives |
+| **Ruling-time manipulation** | A party who controls a page times the `rule` call (anyone can call it) for when their page says what they want | Respondent can also call `rule` early; deadlines limit stalling; stricter appeal | No snapshotting of evidence at filing time (would need on-chain hash or archive) |
+| **Sybil / self-dealing** | One person controls claimant and respondent | Respondent must be a different address | Cannot be detected; harmless while points are valueless |
+| **Collusion with validators** | A validator majority colluding | Out of scope; trust is in the network's consensus | Studionet validators are Studio-run, not a decentralized staked set |
+| **Front-running `rule`/`appeal`** | Observer races to call `rule` | Outcome does not depend on who calls it | Caller chooses timing (see above) |
+| **Stalling** | Respondent never answers, nobody rules | `respond_by`, ruling timeout, appeal timeout, permissionless `expire` | Needs someone to submit the tx |
+| **Page-size padding** | Huge page hides the relevant text past the 12,000-char cut | Model sees the first 12,000 characters only; quote must be on the page | Choose short, focused exhibits |
+| **Appeal spam** | Repeated relitigation | Exactly one appeal, 100-point bond | Bond is small relative to stake if stakes grow |
+| **Gaming the filing screen** | Claimant crafts a claim the AI screen approves but cannot be settled | Result is `INCONCLUSIVE` with full refund | Costs the respondent a round of time |
 
 ## 6. Verifying a ruling yourself
 
