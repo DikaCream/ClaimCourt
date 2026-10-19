@@ -1,0 +1,213 @@
+{
+  "scenario": "inconclusive",
+  "network": "studionet",
+  "chainId": 61999,
+  "contract": "0x6f5597E5cA680444a2E5DfFD50807C1Beb045fA1",
+  "startedAt": "2026-10-19T02:09:21.213Z",
+  "actors": {
+    "A": "0xDa47D90729De435DFA12fa0F517e76c4e5BE7B78",
+    "B": "0xF58B1c230fC3AaC4a8b358353Fb6c863bA66612F"
+  },
+  "steps": [
+    {
+      "step": "claim_points (A)",
+      "actor": "A",
+      "method": "claim_points",
+      "tx": "0xd9e5657c06221a0b1a2061498d72e40243dec9fdd1a3bc388aea0971c0782534",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xd9e5657c06221a0b1a2061498d72e40243dec9fdd1a3bc388aea0971c0782534",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": null,
+      "seconds": 4,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "claim_points (B)",
+      "actor": "B",
+      "method": "claim_points",
+      "tx": "0x6feaaad7149a563f713385efe77457457ffa6f78fa5b884d51e9b56739a44b37",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x6feaaad7149a563f713385efe77457457ffa6f78fa5b884d51e9b56739a44b37",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": null,
+      "seconds": 4,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "file: Sticker order 4417 refund (inconclusive)",
+      "actor": "A",
+      "method": "file_case",
+      "tx": "0x4c9a16503b9fc8bc4bc6022631d7cca462ff1b62deff92a64f0ed3ee9a4edbde",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x4c9a16503b9fc8bc4bc6022631d7cca462ff1b62deff92a64f0ed3ee9a4edbde",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 13,
+      "seconds": 13,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "file: Sticker order 4417 refund (inconclusive) (refiled 2)",
+      "actor": "A",
+      "method": "file_case",
+      "tx": "0xfce69286211a66df484b5bd796217521d7d5b973f31efc182b87f815ac6da6c3",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xfce69286211a66df484b5bd796217521d7d5b973f31efc182b87f815ac6da6c3",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 15,
+      "seconds": 25,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "respond",
+      "actor": "B",
+      "method": "respond",
+      "tx": "0x8ba128220bed055fd321f5cd07575df3314f109641a9722f3f2cdc656e4061da",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x8ba128220bed055fd321f5cd07575df3314f109641a9722f3f2cdc656e4061da",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 15,
+      "seconds": 17,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "rule",
+      "actor": "A",
+      "method": "rule",
+      "tx": "0xd347a3275171e6be624b22c834200c04a90ad33022c2b612d7b9cd40c11fd286",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xd347a3275171e6be624b22c834200c04a90ad33022c2b612d7b9cd40c11fd286",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 15,
+      "seconds": 79,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "appeal by A without new evidence",
+      "actor": "A",
+      "method": "appeal",
+      "tx": "0x4cfb7f5e136c481ed7b3df927fdc00c2d888b7f267ef676d700639ed47ebde26",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x4cfb7f5e136c481ed7b3df927fdc00c2d888b7f267ef676d700639ed47ebde26",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 15,
+      "seconds": 46,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "rule_appeal",
+      "actor": "A",
+      "method": "rule_appeal",
+      "tx": "0x6db140615c705f8de3d7267349442829eafcd1a4c80dbd9a4d133b3001917d3b",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x6db140615c705f8de3d7267349442829eafcd1a4c80dbd9a4d133b3001917d3b",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 15,
+      "seconds": 54,
+      "final_status": "FINALIZED"
+    }
+  ],
+  "checks": [
+    {
+      "check": "file_case receipt returns the case id",
+      "pass": true,
+      "detail": {
+        "id": 13
+      }
+    },
+    {
+      "check": "case exists with this claimant (attempt 1)",
+      "pass": true,
+      "detail": {
+        "status": "REJECTED",
+        "reject": "The evidence URL does not relate to the claim—it points to a generic text file about overturning a claim, not to a published order page or courier log for order #4417."
+      }
+    },
+    {
+      "check": "file_case receipt returns the case id",
+      "pass": true,
+      "detail": {
+        "id": 15
+      }
+    },
+    {
+      "check": "case exists with this claimant (attempt 2)",
+      "pass": true,
+      "detail": {
+        "status": "AWAITING_RESPONSE",
+        "reject": ""
+      }
+    },
+    {
+      "check": "both rounds recorded",
+      "pass": true,
+      "detail": [
+        "INITIAL:INCONCLUSIVE",
+        "APPEAL:INCONCLUSIVE"
+      ]
+    },
+    {
+      "check": "case FINAL after appeal",
+      "pass": true,
+      "detail": {
+        "first": "INCONCLUSIVE",
+        "final": "INCONCLUSIVE",
+        "appeal": "UPHELD",
+        "bond": "RETURNED"
+      }
+    },
+    {
+      "check": "expected scenario: INCONCLUSIVE twice, bond RETURNED",
+      "pass": true,
+      "detail": {
+        "first": "INCONCLUSIVE",
+        "final": "INCONCLUSIVE",
+        "bond": "RETURNED"
+      }
+    }
+  ],
+  "balances": {
+    "A": [
+      1000,
+      1000
+    ],
+    "B": [
+      1000,
+      1000
+    ]
+  },
+  "stats": {
+    "appeals": 6,
+    "by_status": {
+      "APPEALED": 1,
+      "AWAITING_RESPONSE": 4,
+      "FINAL": 5,
+      "READY": 2,
+      "REJECTED": 5,
+      "RULED": 0,
+      "VOID": 0
+    },
+    "cases": 17,
+    "overturned": 2,
+    "total_staked": 880,
+    "users": 24
+  },
+  "finishedAt": "2026-10-19T02:14:09.106Z",
+  "all_finalized": true,
+  "all_checks_pass": true
+}

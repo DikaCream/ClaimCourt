@@ -1,0 +1,197 @@
+{
+  "scenario": "uncompleted",
+  "network": "studionet",
+  "chainId": 61999,
+  "contract": "0x6f5597E5cA680444a2E5DfFD50807C1Beb045fA1",
+  "startedAt": "2026-10-19T01:58:27.890Z",
+  "actors": {
+    "A": "0xEa83b47De4018ae31d925798Bc3aaB109C24fD64",
+    "B": "0x0222f2ffA6f6ca6229EC779Ae50E3817e7F1e624"
+  },
+  "steps": [
+    {
+      "step": "claim_points (A)",
+      "actor": "A",
+      "method": "claim_points",
+      "tx": "0x7d56f16ec883958b6158f0e516acbf7728b5755416acff434fb3b672cd09078c",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x7d56f16ec883958b6158f0e516acbf7728b5755416acff434fb3b672cd09078c",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": null,
+      "seconds": 17,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "claim_points (B)",
+      "actor": "B",
+      "method": "claim_points",
+      "tx": "0x9556dbf4d54a27072762c966a9f2f46c87ab94283d5db8fa1767f44bf48d0fa2",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x9556dbf4d54a27072762c966a9f2f46c87ab94283d5db8fa1767f44bf48d0fa2",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": null,
+      "seconds": 17,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "file: Eiffel bet - appeal uncompleted",
+      "actor": "A",
+      "method": "file_case",
+      "tx": "0x9f1144db3f7c9dae3fc55d4c6f3b8b8b7b893510156cb441744597e639a3fc1d",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x9f1144db3f7c9dae3fc55d4c6f3b8b8b7b893510156cb441744597e639a3fc1d",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 2,
+      "seconds": 100,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "respond",
+      "actor": "B",
+      "method": "respond",
+      "tx": "0x49bfedd4c51a549e0240e7409da9b638c2369f7670989ea39c1f96e14ccab6c1",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x49bfedd4c51a549e0240e7409da9b638c2369f7670989ea39c1f96e14ccab6c1",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 2,
+      "seconds": 63,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "rule",
+      "actor": "A",
+      "method": "rule",
+      "tx": "0x7522357487cbe30c829983cac264d678cd8c4852343c42e2eb18df725e0a9ba8",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x7522357487cbe30c829983cac264d678cd8c4852343c42e2eb18df725e0a9ba8",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 2,
+      "seconds": 96,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "appeal by the losing party (then nobody runs rule_appeal)",
+      "actor": "B",
+      "method": "appeal",
+      "tx": "0x36fe1ff75fa4baf1269bb061daa8d8cba65bb01070190a58260120b4f6582efc",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x36fe1ff75fa4baf1269bb061daa8d8cba65bb01070190a58260120b4f6582efc",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 2,
+      "seconds": 203,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "rule_appeal after the deadline reverts",
+      "actor": "A",
+      "method": "rule_appeal",
+      "tx": "0xb335bd677821cd52e84b1f52bc4a63c5868cc2faf8d7d9f463dcf5d80f258b57",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xb335bd677821cd52e84b1f52bc4a63c5868cc2faf8d7d9f463dcf5d80f258b57",
+      "status": "ACCEPTED",
+      "execution": "ERROR",
+      "ok": true,
+      "expected": "revert",
+      "returned_id": null,
+      "seconds": 62,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "expire (anyone applies the finality rules)",
+      "actor": "A",
+      "method": "expire",
+      "tx": "0x5b67582d69208239b42a15db8c77e2bf45dfbcf8679bc352a4bb21b8d4a093c9",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x5b67582d69208239b42a15db8c77e2bf45dfbcf8679bc352a4bb21b8d4a093c9",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 2,
+      "seconds": 13,
+      "final_status": "FINALIZED"
+    }
+  ],
+  "checks": [
+    {
+      "check": "file_case receipt returns the case id",
+      "pass": true,
+      "detail": {
+        "id": 2
+      }
+    },
+    {
+      "check": "case exists with this claimant and AWAITING_RESPONSE",
+      "pass": true,
+      "detail": {
+        "status": "AWAITING_RESPONSE",
+        "reject": ""
+      }
+    },
+    {
+      "check": "first ruling stands and is FINAL (case NOT voided)",
+      "pass": true,
+      "detail": {
+        "first": "CLAIMANT",
+        "ruling": "CLAIMANT",
+        "status": "FINAL",
+        "appeal_result": "UNRESOLVED"
+      }
+    },
+    {
+      "check": "bond outcome FORFEITED",
+      "pass": true,
+      "detail": "FORFEITED"
+    },
+    {
+      "check": "payout follows the FIRST ruling; the loser did not escape",
+      "pass": true,
+      "detail": {
+        "dLoser": 0,
+        "dOther": 200,
+        "expLoser": 0,
+        "expOther": 200,
+        "first": "CLAIMANT"
+      }
+    }
+  ],
+  "balances": {
+    "A": [
+      1000,
+      1150
+    ],
+    "B": [
+      1000,
+      850
+    ]
+  },
+  "stats": {
+    "appeals": 4,
+    "by_status": {
+      "APPEALED": 1,
+      "AWAITING_RESPONSE": 4,
+      "FINAL": 3,
+      "READY": 1,
+      "REJECTED": 2,
+      "RULED": 0,
+      "VOID": 0
+    },
+    "cases": 11,
+    "overturned": 1,
+    "total_staked": 580,
+    "users": 18
+  },
+  "finishedAt": "2026-10-19T02:08:45.436Z",
+  "all_finalized": true,
+  "all_checks_pass": true
+}

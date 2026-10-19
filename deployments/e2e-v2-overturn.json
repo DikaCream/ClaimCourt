@@ -1,0 +1,200 @@
+{
+  "scenario": "overturn",
+  "network": "studionet",
+  "chainId": 61999,
+  "contract": "0x6f5597E5cA680444a2E5DfFD50807C1Beb045fA1",
+  "startedAt": "2026-10-19T02:09:21.218Z",
+  "actors": {
+    "A": "0xf136Bf3b6F42994A064169dCEA88c04aca5e6d0C",
+    "B": "0x2E9961a8f7a19B96Ae6a1621b07581202d8ae287"
+  },
+  "steps": [
+    {
+      "step": "claim_points (A)",
+      "actor": "A",
+      "method": "claim_points",
+      "tx": "0x429aeb183b6d79fab79ec06f8815b9781cbc2966dafceb3f20862be5fa619408",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x429aeb183b6d79fab79ec06f8815b9781cbc2966dafceb3f20862be5fa619408",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": null,
+      "seconds": 9,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "claim_points (B)",
+      "actor": "B",
+      "method": "claim_points",
+      "tx": "0x4095cdd86524692809cd7f5c2a7298866ab72680842f29de5f26155500bfc411",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x4095cdd86524692809cd7f5c2a7298866ab72680842f29de5f26155500bfc411",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": null,
+      "seconds": 9,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "file: Sticker order 4417 refund (overturn)",
+      "actor": "A",
+      "method": "file_case",
+      "tx": "0x0d31dc34904cc534b3b4aad0acc6dd74a79b0e2124e92f2a63a8e1fb0cb92c47",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x0d31dc34904cc534b3b4aad0acc6dd74a79b0e2124e92f2a63a8e1fb0cb92c47",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 14,
+      "seconds": 17,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "respond",
+      "actor": "B",
+      "method": "respond",
+      "tx": "0x72e31ec40be0c3f206b4da468c4aad5e1bd92f6e89fc092b8fcd3815aedafa5c",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x72e31ec40be0c3f206b4da468c4aad5e1bd92f6e89fc092b8fcd3815aedafa5c",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 14,
+      "seconds": 22,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "rule",
+      "actor": "A",
+      "method": "rule",
+      "tx": "0x04d8d153b73e843db8292306552acc12702e748da369dcf4c4e6760097cf8c0c",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x04d8d153b73e843db8292306552acc12702e748da369dcf4c4e6760097cf8c0c",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 14,
+      "seconds": 59,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "appeal by A with a correction notice (URL carries a #fragment)",
+      "actor": "A",
+      "method": "appeal",
+      "tx": "0xbed998f303c8c0fae2ee6186286be36c5f3cb9fd1b0824c6ad21204b465d8e84",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xbed998f303c8c0fae2ee6186286be36c5f3cb9fd1b0824c6ad21204b465d8e84",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 14,
+      "seconds": 46,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "rule_appeal",
+      "actor": "A",
+      "method": "rule_appeal",
+      "tx": "0xf0e0d2b31af374d241c9f70b4a94d220b27cff52fba8d5a160691db7c191cd2d",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xf0e0d2b31af374d241c9f70b4a94d220b27cff52fba8d5a160691db7c191cd2d",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 14,
+      "seconds": 54,
+      "final_status": "FINALIZED"
+    }
+  ],
+  "checks": [
+    {
+      "check": "file_case receipt returns the case id",
+      "pass": true,
+      "detail": {
+        "id": 14
+      }
+    },
+    {
+      "check": "case exists with this claimant (attempt 1)",
+      "pass": true,
+      "detail": {
+        "status": "AWAITING_RESPONSE",
+        "reject": ""
+      }
+    },
+    {
+      "check": "appeal exhibit stored canonically (fragment stripped)",
+      "pass": true,
+      "detail": [
+        "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/overturn/a-appeal-correction.txt"
+      ]
+    },
+    {
+      "check": "both rounds recorded",
+      "pass": true,
+      "detail": [
+        "INITIAL:RESPONDENT",
+        "APPEAL:CLAIMANT"
+      ]
+    },
+    {
+      "check": "appeal exhibit reached round two",
+      "pass": true,
+      "detail": [
+        "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/overturn/a-claimant-invoice.txt",
+        "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/overturn/a-respondent-delivery.txt",
+        "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/overturn/a-appeal-correction.txt"
+      ]
+    },
+    {
+      "check": "case FINAL after appeal",
+      "pass": true,
+      "detail": {
+        "first": "RESPONDENT",
+        "final": "CLAIMANT",
+        "appeal": "OVERTURNED",
+        "bond": "RETURNED"
+      }
+    },
+    {
+      "check": "expected scenario: appeal OVERTURNED",
+      "pass": true,
+      "detail": {
+        "first": "RESPONDENT",
+        "final": "CLAIMANT",
+        "appeal": "OVERTURNED"
+      }
+    }
+  ],
+  "balances": {
+    "A": [
+      1000,
+      1050
+    ],
+    "B": [
+      1000,
+      950
+    ]
+  },
+  "stats": {
+    "appeals": 6,
+    "by_status": {
+      "APPEALED": 2,
+      "AWAITING_RESPONSE": 5,
+      "FINAL": 4,
+      "READY": 1,
+      "REJECTED": 5,
+      "RULED": 0,
+      "VOID": 0
+    },
+    "cases": 17,
+    "overturned": 2,
+    "total_staked": 830,
+    "users": 24
+  },
+  "finishedAt": "2026-10-19T02:13:39.664Z",
+  "all_finalized": true,
+  "all_checks_pass": true
+}

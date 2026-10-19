@@ -1,0 +1,192 @@
+{
+  "scenario": "upheld",
+  "network": "studionet",
+  "chainId": 61999,
+  "contract": "0x6f5597E5cA680444a2E5DfFD50807C1Beb045fA1",
+  "startedAt": "2026-10-19T01:58:27.862Z",
+  "actors": {
+    "A": "0x2C9B4750842435d7cf0143E64035f853Eb7dDA53",
+    "B": "0x12cFCC591a491DFB8d4f3f44FF6d30E39900c9EA"
+  },
+  "steps": [
+    {
+      "step": "claim_points (A)",
+      "actor": "A",
+      "method": "claim_points",
+      "tx": "0x9533693c9bf7ccff5a494041a2296146906ef88f71522cb15f58f2fa299ddf59",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x9533693c9bf7ccff5a494041a2296146906ef88f71522cb15f58f2fa299ddf59",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": null,
+      "seconds": 13,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "claim_points (B)",
+      "actor": "B",
+      "method": "claim_points",
+      "tx": "0x6e3534252fc473a68cf5844754c59e606c79eeeb3deef7d724e89099c99c5944",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x6e3534252fc473a68cf5844754c59e606c79eeeb3deef7d724e89099c99c5944",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": null,
+      "seconds": 17,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "file: Eiffel bet - appeal upheld",
+      "actor": "A",
+      "method": "file_case",
+      "tx": "0x6ca2ebbb10301a06979679f037d32f098b3c07883b99cf1c4b021b4b0cfe678b",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x6ca2ebbb10301a06979679f037d32f098b3c07883b99cf1c4b021b4b0cfe678b",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 1,
+      "seconds": 67,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "respond",
+      "actor": "B",
+      "method": "respond",
+      "tx": "0xee3505a8a96231d3e448f169c62380090168116dd4046455b4aeedfc375a9e1d",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xee3505a8a96231d3e448f169c62380090168116dd4046455b4aeedfc375a9e1d",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 1,
+      "seconds": 88,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "rule",
+      "actor": "A",
+      "method": "rule",
+      "tx": "0xbc141e8835f1973d991b70aa57af130c5aa38e7c3c9bf6c1a50d22d968da917b",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xbc141e8835f1973d991b70aa57af130c5aa38e7c3c9bf6c1a50d22d968da917b",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 1,
+      "seconds": 84,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "appeal by the losing party",
+      "actor": "B",
+      "method": "appeal",
+      "tx": "0xe3e7a90c4af95cc59fddee1dc8cd425c4ed6cea133c2b7464d2b987313180f79",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xe3e7a90c4af95cc59fddee1dc8cd425c4ed6cea133c2b7464d2b987313180f79",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 1,
+      "seconds": 220,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "rule_appeal",
+      "actor": "A",
+      "method": "rule_appeal",
+      "tx": "0xfb4161fa28acab3de34e9bc30db784fd075e14027eafa52cd4acfb5f5a87f782",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xfb4161fa28acab3de34e9bc30db784fd075e14027eafa52cd4acfb5f5a87f782",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 1,
+      "seconds": 58,
+      "final_status": "FINALIZED"
+    }
+  ],
+  "checks": [
+    {
+      "check": "file_case receipt returns the case id",
+      "pass": true,
+      "detail": {
+        "id": 1
+      }
+    },
+    {
+      "check": "case exists with this claimant and AWAITING_RESPONSE",
+      "pass": true,
+      "detail": {
+        "status": "AWAITING_RESPONSE",
+        "reject": ""
+      }
+    },
+    {
+      "check": "round 1 stored structured findings with a verbatim decisive quote",
+      "pass": true,
+      "detail": [
+        {
+          "exhibit": 0,
+          "fact": "The Eiffel Tower's current total height including antennas is 330 metres, which exceeds 320 metres.",
+          "quote": "The Eiffel Tower in Paris has a current total height of 330 metres (1,083 ft) including its broadcast antennas.",
+          "supports": "CLAIMANT",
+          "url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/e2e/tower-height.txt"
+        },
+        {
+          "exhibit": 0,
+          "fact": "The respondent's belief of 300 metres refers only to the roof height without antennas, not the total current height.",
+          "quote": "Its roof height, without antennas, is 300 metres.",
+          "supports": "CLAIMANT",
+          "url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/e2e/tower-height.txt"
+        }
+      ]
+    },
+    {
+      "check": "appeal decided and case FINAL",
+      "pass": true,
+      "detail": {
+        "first": "CLAIMANT",
+        "final": "CLAIMANT",
+        "appeal": "UPHELD",
+        "bond": "FORFEITED"
+      }
+    },
+    {
+      "check": "expected scenario: appeal UPHELD",
+      "pass": true,
+      "detail": "UPHELD"
+    }
+  ],
+  "balances": {
+    "A": [
+      1000,
+      1150
+    ],
+    "B": [
+      1000,
+      850
+    ]
+  },
+  "stats": {
+    "appeals": 4,
+    "by_status": {
+      "APPEALED": 2,
+      "AWAITING_RESPONSE": 4,
+      "FINAL": 2,
+      "READY": 1,
+      "REJECTED": 1,
+      "RULED": 0,
+      "VOID": 0
+    },
+    "cases": 10,
+    "overturned": 1,
+    "total_staked": 580,
+    "users": 18
+  },
+  "finishedAt": "2026-10-19T02:08:32.361Z",
+  "all_finalized": true,
+  "all_checks_pass": true
+}
