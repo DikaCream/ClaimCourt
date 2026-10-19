@@ -9,7 +9,7 @@ import { pts, sameAddress, shortAddress } from "@/lib/format";
 import { countdown, host, utc } from "@/lib/format";
 import { useCase, useEvidence, useNow, useTx } from "@/lib/hooks";
 import { useWallet } from "@/lib/WalletProvider";
-import type { CourtCase, Round } from "@/lib/claimcourt";
+import { getCase, verifiers, type CaseStatus, type CourtCase, type Round } from "@/lib/claimcourt";
 
 function Party({ role, addr, statement, urls, tone, hashes }: { role: string; addr: string; statement: string; urls: string[]; tone: string; hashes: Record<string, string> }) {
   return (
@@ -53,9 +53,9 @@ function Findings({ rounds }: { rounds: Round[] }) {
       {rounds.map((r, i) => (
         <article key={i} className="pleading p-4">
           <p className="label">
-            Entry {i + 1} · {r.kind === "INITIAL" ? "First ruling" : r.kind === "APPEAL" ? "Appeal ruling (stricter standard)" : "Clerk's order"} · {utc(r.timestamp)}
+            Entry {i + 1} · {r.kind === "INITIAL" ? "First ruling" : r.kind === "APPEAL" ? "Appeal ruling (stricter standard)" : r.kind === "APPEAL_UNDETERMINED" ? "Appeal round recorded as UNDETERMINED" : "Clerk's order"} · {utc(r.timestamp)}
           </p>
-          <p className="mt-1 font-display text-2xl font-semibold">{r.ruling === "VOID" ? "Case voided" : r.ruling === "INCONCLUSIVE" ? "Inconclusive" : `${r.ruling[0]}${r.ruling.slice(1).toLowerCase()} prevails`}</p>
+          <p className="mt-1 font-display text-2xl font-semibold">{r.ruling === "UNDETERMINED" ? "No determinable ruling" : r.ruling === "VOID" ? "Case voided" : r.ruling === "INCONCLUSIVE" ? "Inconclusive" : `${r.ruling[0]}${r.ruling.slice(1).toLowerCase()} prevails`}</p>
           <p className="mt-2">{r.reasoning}</p>
           {r.evidence_quote && (
             <blockquote className="mt-3 border-l-4 border-stamp bg-paper-2/70 px-4 py-2 font-serif italic">
@@ -65,9 +65,26 @@ function Findings({ rounds }: { rounds: Round[] }) {
               </footer>
             </blockquote>
           )}
+          {r.findings && r.findings.length > 0 && (
+            <div className="mt-3" data-testid="findings">
+              <p className="label">Evidence findings ({r.findings.length}) · each quote checked verbatim by every validator</p>
+              <ul className="mt-1 space-y-1">
+                {r.findings.map((f, k) => (
+                  <li key={k} className="typed text-[12px]">
+                    <span className={`stamp stamp-sm mr-1 ${f.supports === "CLAIMANT" ? "text-navy" : f.supports === "RESPONDENT" ? "text-ochre" : "text-ink-2"}`}>{f.supports}</span>
+                    {k === r.decisive && <b className="mr-1 text-stamp">decisive</b>}
+                    exhibit {f.exhibit}: &ldquo;{f.quote}&rdquo; <span className="text-ink-2">— {f.fact}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {r.evidence_incomplete && r.evidence_incomplete.length > 0 && (
+            <p className="typed mt-3 border-2 border-stamp p-2 text-[12px] font-bold text-stamp">Historical evidence incomplete for {r.evidence_incomplete.map(host).join(" · ")}: directional rulings are blocked, so this ruling is INCONCLUSIVE.</p>
+          )}
           {r.evidence_changed && r.evidence_changed.length > 0 && (
             <p className="typed mt-3 border-2 border-stamp p-2 text-[12px] font-bold text-stamp">
-              Evidence changed since the filing snapshot: {r.evidence_changed.map(host).join(" · ")}. Those exhibits were judged from the stored snapshot excerpt, not the live page.
+              Evidence changed since the filing snapshot: {r.evidence_changed.map(host).join(" · ")}. Those exhibits were judged from the stored snapshot text (the full fingerprinted window), not the live page.
             </p>
           )}
           {r.sources.length > 0 && <p className="typed mt-3 text-[11px] text-ink-2">Exhibits read: {r.sources.map(host).join(" · ")}</p>}
@@ -93,7 +110,21 @@ function Motions({ c }: { c: CourtCase }) {
   const ok = !!me && w.isCorrectChain;
   const id = c.id;
   const clean = urls.map((u) => u.trim()).filter(Boolean);
-  const busyLabel = (t: string) => (tx.busy ? "Working…" : t);
+  const busyLabel = (t: string) => (tx.busy ? "Waiting for finalization…" : t);
+  // Every action is keyed per case+method (no duplicate in-flight submissions) and only reports success once
+  // the transaction FINALIZED and the case is really in an expected state.
+  const act = (fn: string, args: unknown[], expect: CaseStatus[]) =>
+    tx.run(fn, args, {
+      key: `${fn}:${id}`,
+      verify: async (r) => {
+        if (fn === "rule_appeal") {
+          const cc = await getCase(id);
+          if (cc.status === "APPEALED" && cc.appeal_undetermined > 0) return "the validators could not decide this appeal round; it was recorded as an attempt. You may run it again before the deadline.";
+          return cc.status === "FINAL" ? null : `case is ${cc.status}, expected FINAL`;
+        }
+        return verifiers.status(id, expect);
+      },
+    });
 
   const items: React.ReactNode[] = [];
   if (c.status === "AWAITING_RESPONSE") {
@@ -108,20 +139,20 @@ function Motions({ c }: { c: CourtCase }) {
               onChange={(e) => setUrls(urls.map((x, j) => (j === i ? e.target.value : x)))} />
           ))}
           <button className="btn mt-4" disabled={!ok || tx.busy || stmt.trim().length < 20 || clean.length < 1}
-            onClick={() => tx.run("respond", [id, stmt, clean])}>{busyLabel(`Match stake & answer`)}</button>
+            onClick={() => act("respond", [id, stmt, clean], ["READY", "RULED", "APPEALED", "FINAL"])}>{busyLabel(`Match stake & answer`)}</button>
         </div>,
       );
     }
     if (isC) {
       items.push(
-        <button key="wd" className="btn btn-ghost" disabled={!ok || tx.busy} onClick={() => tx.run("withdraw_case", [id])}>
+        <button key="wd" className="btn btn-ghost" disabled={!ok || tx.busy} onClick={() => act("withdraw_case", [id], ["VOID"])}>
           Withdraw case (stake returns)
         </button>,
       );
     }
     if (now >= c.respond_by) {
       items.push(
-        <button key="ex" className="btn btn-red" disabled={!ok || tx.busy} onClick={() => tx.run("expire", [id])}>
+        <button key="ex" className="btn btn-red" disabled={!ok || tx.busy} onClick={() => act("expire", [id], ["VOID", "FINAL"])}>
           {busyLabel("Void: respondent never answered")}
         </button>,
       );
@@ -131,13 +162,13 @@ function Motions({ c }: { c: CourtCase }) {
     if (now < c.ruling_due) {
       items.push(
         <div key="rule">
-          <button className="btn btn-red" disabled={!ok || tx.busy} onClick={() => tx.run("rule", [id])}>{busyLabel("Call the ruling")}</button>
+          <button className="btn btn-red" disabled={!ok || tx.busy} onClick={() => act("rule", [id], ["RULED", "APPEALED", "FINAL"])}>{busyLabel("Call the ruling")}</button>
           <p className="mt-2 text-[14px] italic text-ink-2">Anyone may call it. Validators compare every exhibit with its filing-time snapshot first; this takes about a minute.</p>
         </div>,
       );
     } else {
       items.push(
-        <button key="ex" className="btn btn-red" disabled={!ok || tx.busy} onClick={() => tx.run("expire", [id])}>
+        <button key="ex" className="btn btn-red" disabled={!ok || tx.busy} onClick={() => act("expire", [id], ["VOID", "FINAL"])}>
           {busyLabel("Void: ruling deadline passed (refund both)")}
         </button>,
       );
@@ -149,18 +180,18 @@ function Motions({ c }: { c: CourtCase }) {
         <div key="app" className="pleading p-4">
           <p className="font-display text-xl font-semibold">Notice of appeal</p>
           <p className="text-[15px] italic text-ink-2">
-            Bond: {APPEAL_BOND} points. If the second, stricter round upholds a ruling for the other side you forfeit the bond to them; if it changes the ruling you get it back. Appealing an INCONCLUSIVE ruling cannot lose the bond: it is returned if the second round is inconclusive too.
+            Bond: {APPEAL_BOND} points. If the second, stricter round upholds a ruling for the other side you forfeit the bond to them; if it changes the ruling you get it back. If the appeal is never decided, the FIRST ruling stands and is paid out: leaving an appeal unresolved is never an escape, and the bond is forfeited unless validators demonstrably failed (see the appeal-finality table in the Local Rules).
           </p>
           <textarea className="field mt-3" rows={3} maxLength={500} value={reason} onChange={(e) => setReason(e.target.value)} placeholder="Grounds of appeal (20–500 characters)" />
           <input className="field mt-2" placeholder="Optional new exhibit https://…" value={extra} onChange={(e) => setExtra(e.target.value)} spellCheck={false} />
           <button className="btn btn-red mt-4" disabled={!ok || tx.busy || reason.trim().length < 20}
-            onClick={() => tx.run("appeal", [id, reason, extra.trim()])}>{busyLabel(`File appeal (bond ${APPEAL_BOND})`)}</button>
+            onClick={() => act("appeal", [id, reason, extra.trim()], ["APPEALED", "FINAL"])}>{busyLabel(`File appeal (bond ${APPEAL_BOND})`)}</button>
         </div>,
       );
     }
     if (!c.appeal_open) {
       items.push(
-        <button key="fin" className="btn" disabled={!ok || tx.busy} onClick={() => tx.run("finalize", [id])}>{busyLabel("Finalize and pay out")}</button>,
+        <button key="fin" className="btn" disabled={!ok || tx.busy} onClick={() => act("finalize", [id], ["FINAL"])}>{busyLabel("Finalize and pay out")}</button>,
       );
     }
   }
@@ -168,12 +199,17 @@ function Motions({ c }: { c: CourtCase }) {
     items.push(
       now < c.appeal_due ? (
         <div key="ra">
-          <button className="btn btn-red" disabled={!ok || tx.busy} onClick={() => tx.run("rule_appeal", [id])}>{busyLabel("Hear the appeal")}</button>
-          <p className="mt-2 text-[14px] italic text-ink-2">Anyone may call it. A stricter standard applies.</p>
+          <button className="btn btn-red" disabled={!ok || tx.busy} onClick={() => act("rule_appeal", [id], ["FINAL"])}>{busyLabel("Hear the appeal")}</button>
+          <p className="mt-2 text-[14px] italic text-ink-2">Anyone may call it. A stricter standard applies. If validators fail to reach consensus, the appellant can record an attempt below (max {3}; each adds {c.appeal_grace_s / 60} min).</p>
+          {sameAddress(me, c.appellant) && c.appeal_attempts < 3 && (
+            <button className="btn btn-ghost mt-2" disabled={!ok || tx.busy} onClick={() => tx.run("register_appeal_attempt", [id], { key: `register_appeal_attempt:${id}:${c.appeal_attempts}`, verify: async () => ((await getCase(id)).appeal_attempts > c.appeal_attempts ? null : "attempt not recorded") })}>
+              Record an appeal attempt ({c.appeal_attempts}/3)
+            </button>
+          )}
         </div>
       ) : (
-        <button key="ex" className="btn btn-red" disabled={!ok || tx.busy} onClick={() => tx.run("expire", [id])}>
-          {busyLabel("Void: appeal deadline passed (refund all)")}
+        <button key="ex" className="btn btn-red" disabled={!ok || tx.busy} onClick={() => act("expire", [id], ["VOID", "FINAL"])}>
+          {busyLabel("Settle: appeal deadline passed (first ruling stands)")}
         </button>
       ),
     );
@@ -226,7 +262,7 @@ export default function CasePage() {
         {c.status === "AWAITING_RESPONSE" && <Deadline label="Answer due" ts={c.respond_by} now={now} />}
         {c.status === "READY" && <Deadline label="Ruling due" ts={c.ruling_due} now={now} />}
         {c.status === "RULED" && <Deadline label="Appeal window ends" ts={c.appeal_ends} now={now} />}
-        {c.status === "APPEALED" && <Deadline label="Appeal due" ts={c.appeal_due} now={now} />}
+        {c.status === "APPEALED" && <Deadline label={`Appeal due (${c.appeal_attempts} attempt${c.appeal_attempts === 1 ? "" : "s"} recorded)`} ts={c.appeal_due} now={now} />}
         {c.final_at > 0 && <p className="typed text-[13px]"><span className="label mr-2">Closed</span>{utc(c.final_at)}</p>}
       </div>
 
@@ -256,7 +292,10 @@ export default function CasePage() {
               {c.appeal_evidence.map((u) => <p key={u} className="typed mt-1 text-[12px]">New exhibit: <a className="ink-link" href={u} target="_blank" rel="noreferrer">{u}</a></p>)}
               {c.appeal_result && (
                 <p className="typed mt-2 text-[13px] font-bold">
-                  {c.appeal_result === "OVERTURNED" ? "Ruling changed on appeal. Bond returned." : c.appeal_bond_outcome === "RETURNED" ? "Ruling upheld (still inconclusive). Bond returned to the appellant." : "Ruling upheld. Bond forfeited to the other party."}
+                  {c.appeal_result === "OVERTURNED" ? "Ruling changed on appeal. Bond returned."
+                    : c.appeal_result === "UNRESOLVED"
+                      ? `Appeal never decided by its deadline: the first ruling (${c.first_ruling}) stands and was paid out. Bond ${c.appeal_bond_outcome === "RETURNED" ? "returned (validators recorded a failed round)" : c.appeal_bond_outcome === "SPLIT" ? "split 50/50 (attempt registered, no failure recorded)" : "forfeited to the other party (appeal not pursued)"}.`
+                      : c.appeal_bond_outcome === "RETURNED" ? "Ruling upheld (still inconclusive). Bond returned to the appellant." : "Ruling upheld. Bond forfeited to the other party."}
                 </p>
               )}
             </div>

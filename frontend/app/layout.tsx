@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { SITE_URL } from "@/lib/config";
 import { Masthead } from "@/components/Masthead";
+import { PendingTxs } from "@/components/PendingTxs";
 
 const fraunces = Fraunces({ subsets: ["latin"], variable: "--font-fraunces", display: "swap", axes: ["opsz"] });
 const newsreader = Newsreader({ subsets: ["latin"], variable: "--font-newsreader", display: "swap", style: ["normal", "italic"] });
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <div className="mx-auto max-w-[1100px] px-2 py-4 sm:px-6 sm:py-8">
             <div className="sheet px-5 pb-10 pt-6 sm:px-14 sm:pl-24">
               <Masthead />
+              <PendingTxs />
               <main>{children}</main>
               <footer className="mt-16 border-t border-ink pt-4 text-sm text-ink-2">
                 <p className="typed text-[12px]">

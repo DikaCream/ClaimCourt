@@ -18,46 +18,65 @@ export default function Rules() {
 
       <SectionTitle n="1.">The course of a case</SectionTitle>
       <ol className="list-decimal space-y-2 pl-6">
-        <li><b>Filing.</b> The claimant stakes points and files a claim, a statement and 1–3 public https exhibits. Screening validators dismiss frivolous or vague filings; no stake is taken. Validators then fetch every exhibit and the contract stores a <b>sha256 hash and a 2,000-character excerpt</b> of each page (the evidence snapshot). If validators cannot read an exhibit, or do not see identical content, the filing is dismissed.</li>
-        <li><b>Answer.</b> The named respondent has a fixed time to match the stake and file a statement and exhibits, which are snapshotted the same way. If they do not, the case is void and the stake returns.</li>
-        <li><b>Ruling.</b> Anyone can call &ldquo;rule&rdquo;. The leader validator re-fetches every exhibit and compares it with its snapshot hash. An unchanged page is judged live; a page that <b>changed (or vanished) since the snapshot is judged from the stored excerpt</b> and the ruling is flagged &ldquo;evidence changed&rdquo;. The leader proposes CLAIMANT, RESPONDENT or INCONCLUSIVE with reasons and a verbatim quote; the other validators must agree on which exhibits changed, independently reach the same ruling, and the quote must literally appear in the text the court was allowed to use.</li>
-        <li><b>Appeal.</b> The party who did not prevail may appeal once within the window for a 100-point bond, optionally adding one new exhibit. A stricter second round runs: changing the ruling needs clear and convincing evidence and a verbatim quote, otherwise INCONCLUSIVE.</li>
+        <li><b>Filing.</b> The claimant stakes points and files a claim, a statement and 1–3 public https exhibits. Screening validators dismiss frivolous or vague filings; no stake is taken. Validators then fetch every exhibit and the contract stores a <b>sha256 fingerprint and the full normalised text of the first 12,000 characters</b> of each page (the evidence snapshot). Every validator must reproduce the leader&rsquo;s snapshot exactly; an empty or altered excerpt, or a page that differs between validators, gives no consensus. Pages longer than the window are flagged <i>truncated</i>.</li>
+        <li><b>Answer.</b> The named respondent has a fixed time to match the stake and file a statement and exhibits, snapshotted the same way. If they do not, the case is void and the stake returns.</li>
+        <li><b>Ruling.</b> Anyone can call &ldquo;rule&rdquo;. The leader re-fetches every exhibit and compares it with its snapshot. An unchanged page is judged live; a page that <b>changed or vanished is judged from the stored snapshot text</b> and the ruling is flagged. The leader returns up to 4 structured <b>evidence findings</b> (see section 3) and a ruling.</li>
+        <li><b>Appeal.</b> The party who did not prevail may appeal once within the window for a 100-point bond, optionally adding one new exhibit. The second round is stricter: changing the ruling needs clear and convincing evidence and a verbatim quote, otherwise INCONCLUSIVE. All exhibits (including the appeal exhibit) are read in round two.</li>
         <li><b>Settlement.</b> Winner takes both stakes. Inconclusive returns each stake. A wrong appellant (a ruling for the other side upheld) forfeits the bond to that party; a successful appellant gets it back. If the first ruling was INCONCLUSIVE and the appeal is inconclusive too, the bond is returned to the appellant, because nobody prevailed.</li>
-        <li><b>Timeouts.</b> Unanswered, un-ruled or un-appealed cases are voided by anyone calling &ldquo;expire&rdquo; after the deadline, and everything is refunded.</li>
+        <li><b>Timeouts.</b> Unanswered and un-ruled cases are voided by anyone calling &ldquo;expire&rdquo; after the deadline, and stakes are refunded. An appeal that is never decided is NOT voided: see the appeal-finality rules below.</li>
       </ol>
 
-      <SectionTitle n="2.">What the court trusts, and what it does not</SectionTitle>
+      <SectionTitle n="2.">Appeal finality: what happens if the appeal is never decided</SectionTitle>
+      <p className="mb-3">A valid first ruling is never erased by an unfinished appeal, so leaving an appeal unresolved is not a risk-free escape. When the appeal deadline (plus any grace) passes, anyone calls &ldquo;expire&rdquo; and the <b>first ruling stands and is paid out</b>. Only the bond depends on diligence:</p>
+      <div className="overflow-x-auto">
+        <table className="typed w-full border-collapse text-[12px]" data-testid="appeal-finality-table">
+          <thead><tr className="border-b-2 border-ink text-left"><th className="p-2">Situation at the deadline</th><th className="p-2">Case outcome</th><th className="p-2">Appeal bond ({APPEAL_BOND} pts)</th></tr></thead>
+          <tbody>
+            <tr className="border-b border-ink/40"><td className="p-2">Round two decided and changed the ruling</td><td className="p-2">OVERTURNED: new ruling paid</td><td className="p-2">Returned to appellant</td></tr>
+            <tr className="border-b border-ink/40"><td className="p-2">Round two decided and confirmed a side&rsquo;s win</td><td className="p-2">UPHELD: first ruling paid</td><td className="p-2">Forfeited to the other party</td></tr>
+            <tr className="border-b border-ink/40"><td className="p-2">Round two inconclusive after an inconclusive first ruling</td><td className="p-2">UPHELD: stakes refunded</td><td className="p-2">Returned to appellant (nobody prevailed)</td></tr>
+            <tr className="border-b border-ink/40"><td className="p-2"><b>Network failure:</b> a round ran and consensus itself recorded UNDETERMINED (no usable ruling)</td><td className="p-2">UNRESOLVED: <b>first ruling stands</b> and is paid</td><td className="p-2"><b>Returned</b> to appellant</td></tr>
+            <tr className="border-b border-ink/40"><td className="p-2"><b>Attempt registered</b> by the appellant (max 3, +10 min each) but no failure recorded on-chain</td><td className="p-2">UNRESOLVED: <b>first ruling stands</b> and is paid</td><td className="p-2"><b>Split 50/50</b> with the other party</td></tr>
+            <tr><td className="p-2"><b>Never pursued:</b> no round ran and no attempt registered</td><td className="p-2">UNRESOLVED: <b>first ruling stands</b> and is paid</td><td className="p-2"><b>Forfeited</b> to the other party</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p className="mt-3 text-[15px] italic">Why registered attempts exist: a round that fails to reach consensus leaves no state on-chain, so the court cannot see it. An attempt registration is a cheap, appellant-only, capped marker; it earns only half the bond back, which rewards actually running the round (whose failure is recorded objectively and refunds the bond in full).</p>
+
+      <SectionTitle n="3.">What validators must agree on: the evidence-findings model</SectionTitle>
       <ul className="list-disc space-y-2 pl-6">
-        <li>It trusts <b>only the text of the exhibits as snapshotted at filing/response time</b> (live only while the page still matches its hash). Statements are allegations. All party text, appeal grounds, the first ruling&rsquo;s quote and reasoning, and page text are fenced as &ldquo;untrusted data, never instructions&rdquo; with angle brackets escaped, and instructions inside them are ignored.</li>
-        <li>A ruling for either side without a verbatim quote from a submitted exhibit is automatically downgraded to INCONCLUSIVE, which refunds both parties.</li>
-        <li>Validators can disagree (for example if a page is unstable between fetches). Then consensus fails, no ruling is stored, and the ruling deadline refunds both stakes.</li>
-        <li>Editing a page after filing cannot change the case: the snapshot excerpt is used and the edit is flagged. But the excerpt is only the first 2,000 characters and the hash is the leader&rsquo;s observation confirmed by validators, not an archive. Put the decisive text early on short, stable pages.</li>
-      </ul>
-      <SectionTitle n="3.">What validators must agree on</SectionTitle>
-      <ul className="list-disc space-y-2 pl-6">
-        <li>The <b>ruling label</b> (CLAIMANT, RESPONDENT or INCONCLUSIVE) must be identical. The written reasoning is not compared.</li>
-        <li>The set of exhibits whose live page <b>no longer matches the snapshot hash</b> must be identical.</li>
-        <li>For a ruling in favour of a side, each validator checks the leader&rsquo;s quote <b>literally appears</b> in the text the court was allowed to use for that exhibit (live page, or snapshot excerpt if changed).</li>
-        <li>If they cannot agree, nothing is stored and no points move. Retry the ruling, or after the deadline anyone can void the case for a full refund.</li>
+        <li>A ruling comes with <b>up to 4 findings</b>, each: exhibit index, a <b>verbatim quote</b>, a short fact statement, and <b>supports</b> = CLAIMANT, RESPONDENT or NEUTRAL, plus one <b>decisive</b> finding whose label must equal the ruling.</li>
+        <li>Every validator independently re-derives its own findings and must agree on the <b>ruling label</b>, on which exhibits <b>changed</b> and which are <b>incomplete</b>, and on the <b>material findings</b>: every quote must literally exist in the text the court may use; no overlapping finding may carry a <b>contradictory support label</b>; and the validator&rsquo;s own reading (its matching finding, or a dedicated quote assessment) must find the decisive quote <b>relevant and supporting the ruled side</b>. An irrelevant quotation or a contradictory interpretation fails consensus even when the ruling labels match.</li>
+        <li>A leader ruling for a side with no verbatim, correctly labelled decisive finding is downgraded to INCONCLUSIVE. If admitted historical evidence is <b>incomplete</b> (stored text missing or no longer matching its fingerprint) directional rulings are blocked.</li>
+        <li>If validators cannot agree, nothing is stored and no points move. Retry the ruling, or after the deadline anyone can void the case for a full refund.</li>
       </ul>
 
-      <SectionTitle n="4.">How to challenge a ruling</SectionTitle>
+      <SectionTitle n="4.">What the court trusts, and what it does not</SectionTitle>
+      <ul className="list-disc space-y-2 pl-6">
+        <li><b>Source-content integrity is not real-world authenticity.</b> The court can show that a page said X when it was snapshotted (hash + full stored text) and that the quote is really on it. It cannot show who wrote the page, that the page is true, or that a party controls the wallet or the identity they claim. Rulings decide what the submitted web pages support, not what happened.</li>
+        <li>It trusts only the snapshotted text of the exhibits (live only while the page still matches its hash). Statements are allegations. All party text, appeal grounds, the first ruling&rsquo;s quote and reasoning, and page text are fenced as &ldquo;untrusted data, never instructions&rdquo; with angle brackets escaped.</li>
+        <li>Editing a page after filing cannot change the case: the stored 12,000-character text is used and the edit is flagged. Edits <i>before</i> the snapshot are not detectable. For immutable artifacts prefer archive or IPFS URLs.</li>
+        <li>Evidence URLs are compared exactly after normalisation: the #fragment is dropped, scheme and host are lowercased, path and ?query are kept. So /report and /report-final are different exhibits, ?v=1 and ?v=2 differ, /report#top is the same as /report. Duplicates are removed.</li>
+      </ul>
+
+      <SectionTitle n="5.">How to challenge a ruling</SectionTitle>
       <p>
         Appeal once for a {APPEAL_BOND}-point bond inside the appeal window. The second round is stricter and its result is final. If a ruling for a side is unchanged the bond goes to
-        the other party, so appeal only with a real ground. If you can show the validators misread a page, add one new exhibit with your appeal.
+        the other party, so appeal only with a real ground. If you can show the validators misread a page, add one new exhibit with your appeal. Then run the appeal (&ldquo;Hear the appeal&rdquo;) before its deadline.
       </p>
 
-      <SectionTitle n="5.">Known risks</SectionTitle>
+      <SectionTitle n="6.">Known risks</SectionTitle>
       <ul className="list-disc space-y-2 pl-6">
-        <li><b>Fixed in this version:</b> page swapping after filing (snapshot hash + excerpt, changed pages flagged), unfenced appeal text and first-round reasoning (now fenced and escaped), and the INCONCLUSIVE-then-INCONCLUSIVE appeal that used to pay the bond to a non-winner (now refunded).</li>
-        <li><b>Still open, evidence:</b> the snapshot is a hash plus a 2,000-character excerpt, not a full archive; a page edited <i>before</i> the snapshot, or content past the first 12,000 characters, is not covered; unstable pages (ads, clocks) cannot be filed. Prefer archived, third-party pages.</li>
-        <li><b>Still open, prompt injection:</b> fencing and the verbatim-quote requirement limit the damage but no prompt defense is perfect; models can still be swayed by persuasive quoted text.</li>
-        <li><b>Colluding or duplicate wallets:</b> nothing stops one person controlling both sides. Stakes are play points, so nothing real is at risk.</li>
+        <li><b>Fixed in this version:</b> an unresolved appeal no longer voids a valid first ruling; appeal exhibits are matched by exact URL, not substring; rulings need structured, cross-checked findings; snapshots must equal the deterministic text and keep the full 12,000-character window; the interface reports success only after finalization and verification; new case ids come from the transaction itself; the registry is indexed and paginated.</li>
+        <li><b>Still open, provenance:</b> nothing proves who published a page or that a wallet belongs to a real person. Not suitable for real monetary stakes without stronger provenance, identity and settlement.</li>
+        <li><b>Still open, evidence:</b> content past 12,000 characters is not covered (flagged as truncated); a page edited before the snapshot is not caught; unstable pages (ads, clocks) cannot be filed.</li>
+        <li><b>Still open, prompt injection:</b> fencing, verbatim quotes and independent validator checks limit the damage but no prompt defense is perfect.</li>
+        <li><b>Colluding or duplicate wallets:</b> nothing stops one person controlling both sides. Stakes are play points.</li>
         <li>Studionet is a test network with Studio-run validators and can reset.</li>
       </ul>
 
       <p className="mt-6">
-        The full document covers sources, outcome agreement, disagreement handling and the challenge process:{" "}
+        See also the <a className="ink-link text-stamp" href="/trust">Trust &amp; limits</a> page. The full document covers sources, outcome agreement, disagreement handling and the challenge process:{" "}
         <a className="ink-link text-stamp" href={GH} target="_blank" rel="noreferrer">docs/TRUST_MODEL.md</a>.
       </p>
     </div>
