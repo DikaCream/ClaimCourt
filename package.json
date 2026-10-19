@@ -14,10 +14,16 @@
     "lint:contract": "genvm-lint check contracts/claimcourt.py",
     "test:contract": "pytest tests/direct/ -v",
     "dev": "cd frontend && npm run dev",
-    "build": "cd frontend && npm run build"
+    "build": "cd frontend && npm run build",
+    "e2e:v2": "node scripts/e2e-v2.mjs",
+    "verify:deployment": "node scripts/verify-deployment.mjs",
+    "demo:browser": "node scripts/browser-demo.mjs"
   },
   "dependencies": {
     "dotenv": "16.6.1",
     "genlayer-js": "1.1.8"
+  },
+  "devDependencies": {
+    "playwright-core": "1.49.1"
   }
 }

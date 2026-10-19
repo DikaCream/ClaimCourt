@@ -34,7 +34,7 @@ jobs:
       run:
         working-directory: frontend
     env:
-      NEXT_PUBLIC_CONTRACT_ADDRESS: "0x72A5063875Bb25f8CF450eFe3710671de5bEF0aE"
+      NEXT_PUBLIC_CONTRACT_ADDRESS: "0x6f5597E5cA680444a2E5DfFD50807C1Beb045fA1"
       NEXT_TELEMETRY_DISABLED: "1"
     steps:
       - uses: actions/checkout@v4
