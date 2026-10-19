@@ -108,6 +108,9 @@ cd frontend && npm install && npm run dev     # NEXT_PUBLIC_CONTRACT_ADDRESS in 
 `scripts/verify-deployment.mjs` downloads the code that Studionet holds for the contract address (`getContractCode`), computes its sha256 and compares it with `contracts/claimcourt.py` and with the file on GitHub `main`.
 The result (address, sha256, git commit, match) is recorded in [`deployments/verification.json`](deployments/verification.json).
 
+- Deployed sha256: `e3197ca3f8bc0cf6d622c1f3ea5bf439e5765790ec425f36f1fa9396fdb61458` (55,656 bytes), identical to `contracts/claimcourt.py` at git commit `f4c3ba081493ab6be78ff8dc227e7519bf5921e4` (verified 2026-10-19).
+- Deploy transaction: [`0xe4193b3d…9984`](https://explorer-studio.genlayer.com/transactions/0xe4193b3d2461ed4ff4cb7f395fc7b9a3216c8a47830e39f0fe4910bebe829984).
+
 ### On-chain results
 
 Every scenario writes `deployments/e2e-v2-<scenario>.json` with the tx hash and explorer link (`https://explorer-studio.genlayer.com/transactions/<tx>`) of each step, the observed outcome and the FINALIZED confirmation.

@@ -1,0 +1,16 @@
+{
+  "address": "0x6f5597E5cA680444a2E5DfFD50807C1Beb045fA1",
+  "rpc": "https://studio.genlayer.com/api",
+  "method": "genlayer-js getContractCode (gen_getContractCode)",
+  "deployed_sha256": "e3197ca3f8bc0cf6d622c1f3ea5bf439e5765790ec425f36f1fa9396fdb61458",
+  "deployed_bytes": 55656,
+  "local_sha256": "e3197ca3f8bc0cf6d622c1f3ea5bf439e5765790ec425f36f1fa9396fdb61458",
+  "local_matches_deployed": true,
+  "header_ok": true,
+  "deploy_tx": "0xe4193b3d2461ed4ff4cb7f395fc7b9a3216c8a47830e39f0fe4910bebe829984",
+  "verified_at": "2026-10-19T02:34:53.245Z",
+  "commit": "f4c3ba081493ab6be78ff8dc227e7519bf5921e4",
+  "commit_source_url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/f4c3ba081493ab6be78ff8dc227e7519bf5921e4/contracts/claimcourt.py",
+  "commit_sha256": "e3197ca3f8bc0cf6d622c1f3ea5bf439e5765790ec425f36f1fa9396fdb61458",
+  "commit_matches_deployed": true
+}
