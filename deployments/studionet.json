@@ -3,11 +3,11 @@
   "chainId": 61999,
   "rpc": "https://studio.genlayer.com/api",
   "explorer": "https://explorer-studio.genlayer.com",
-  "contractAddress": "0x72A5063875Bb25f8CF450eFe3710671de5bEF0aE",
-  "deployTxHash": "0x14fe908629b349dbcbe22193ae4abca5e3ed0dd86d8b67afc606244fdd0238ff",
+  "contractAddress": "0x6f5597E5cA680444a2E5DfFD50807C1Beb045fA1",
+  "deployTxHash": "0xe4193b3d2461ed4ff4cb7f395fc7b9a3216c8a47830e39f0fe4910bebe829984",
   "deployer": "0xBb9E609bf277a0Ffb0018515d0a850037C2b17c3",
   "status": "ACCEPTED",
   "consensusResult": "MAJORITY_AGREE",
   "executionResult": "SUCCESS",
-  "createdAt": "2026-10-18T13:32:41.688480+00:00"
+  "createdAt": "2026-10-19T01:56:52.808028+00:00"
 }
