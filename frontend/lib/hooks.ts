@@ -1,16 +1,26 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CONTRACT_ADDRESS } from "./config";
-import { getCase, getCases, getEvidence, getStats, getUser, sendTx, TxError, type TxResult } from "./claimcourt";
+import { getCase, getCases, getEvidence, getStats, getUser, sendTx, TxError, type TxOptions, type TxResult } from "./claimcourt";
 import { getProvider } from "./wallet";
 import { useWallet } from "./WalletProvider";
 
 const enabled = !!CONTRACT_ADDRESS;
 
+export const PAGE_SIZE = 20;
+
+/** Newest-first registry, one bounded page at a time ("Load more" walks the whole history). */
 export const useCases = (status: string) =>
-  useQuery({ queryKey: ["cc", "cases", status], queryFn: () => getCases(status, 0, 50), enabled, refetchInterval: 15_000 });
+  useInfiniteQuery({
+    queryKey: ["cc", "cases", status],
+    queryFn: ({ pageParam }) => getCases(status, pageParam, PAGE_SIZE),
+    initialPageParam: 0,
+    getNextPageParam: (last) => (last.next_offset >= 0 ? last.next_offset : undefined),
+    enabled,
+    refetchInterval: 30_000,
+  });
 
 export const useCase = (id: number | null) =>
   useQuery({ queryKey: ["cc", "case", id], queryFn: () => getCase(id as number), enabled: enabled && id !== null, refetchInterval: 8_000 });
@@ -43,7 +53,7 @@ export function useTx() {
   const [busy, setBusy] = useState(false);
 
   const run = useCallback(
-    async (functionName: string, args: unknown[]): Promise<TxResult | null> => {
+    async (functionName: string, args: unknown[], opts?: TxOptions): Promise<TxResult | null> => {
       const provider = getProvider();
       if (!address || !provider) {
         setError("Connect MetaMask first");
@@ -54,7 +64,7 @@ export function useTx() {
       setHash(null);
       setStatus("SIGNING");
       try {
-        return await sendTx(address, provider, functionName, args, { onHash: setHash, onStatus: setStatus });
+        return await sendTx(address, provider, functionName, args, { onHash: setHash, onStatus: setStatus }, opts);
       } catch (e: any) {
         if (e instanceof TxError && e.hash) setHash(e.hash);
         setError(friendlyError(e));
@@ -67,6 +77,7 @@ export function useTx() {
     [address, queryClient],
   );
 
+  // Hold the busy flag for the whole operation (also across re-renders) so a second click cannot double-submit.
   const reset = useCallback(() => {
     setStatus(null);
     setHash(null);

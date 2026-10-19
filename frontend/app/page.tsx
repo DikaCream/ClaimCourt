@@ -23,6 +23,9 @@ export default function Docket() {
   const cases = useCases(tab);
   const stats = useStats();
   const s = stats.data;
+  // pages can overlap when new cases arrive between loads: show every id once
+  const rows = cases.data ? Array.from(new Map(cases.data.pages.flatMap((p) => p.items).map((c) => [c.id, c])).values()) : [];
+  const total = cases.data?.pages[0]?.total ?? 0;
   return (
     <div className="pt-8">
       <section className="grid gap-6 md:grid-cols-[1.4fr_1fr]">
@@ -67,12 +70,12 @@ export default function Docket() {
         {!CONTRACT_ADDRESS && <p className="py-8 typed">The court contract address is not configured.</p>}
         {cases.isLoading && <p className="py-8 typed animate-pulse">The clerk is fetching the docket…</p>}
         {cases.error && <p className="py-8 typed text-stamp">Could not reach the court: {(cases.error as Error).message}</p>}
-        {cases.data && cases.data.items.length === 0 && (
+        {cases.data && rows.length === 0 && (
           <p className="py-10 text-center font-display text-xl italic text-ink-2">
             No matters on this docket. <Link href="/file" className="ink-link text-stamp">File the first.</Link>
           </p>
         )}
-        {cases.data?.items.map((c) => (
+        {rows.map((c) => (
           <Link
             key={c.id}
             href={`/case/${c.id}`}
@@ -92,6 +95,18 @@ export default function Docket() {
             <span className="typed hidden text-right text-[12px] text-ink-2 md:block">{timeAgo(c.filed_at)}</span>
           </Link>
         ))}
+        {cases.data && (
+          <div className="rule-thin mt-3 flex flex-wrap items-center gap-3 pt-3 typed text-[12px]" data-testid="pager">
+            <span>Showing {rows.length} of {total} {tab ? "in this status" : "matters"}, newest first.</span>
+            {cases.hasNextPage ? (
+              <button className="btn btn-ghost !px-3 !py-1.5" disabled={cases.isFetchingNextPage} onClick={() => cases.fetchNextPage()}>
+                {cases.isFetchingNextPage ? "Loading…" : "Load older matters"}
+              </button>
+            ) : (
+              <span className="text-ink-2">End of the docket.</span>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

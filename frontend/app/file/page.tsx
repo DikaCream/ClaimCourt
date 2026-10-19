@@ -7,7 +7,7 @@ import { APPEAL_BOND } from "@/lib/config";
 import { pts } from "@/lib/format";
 import { useTx, useUser } from "@/lib/hooks";
 import { useWallet } from "@/lib/WalletProvider";
-import { getCases } from "@/lib/claimcourt";
+import { getCasesByFiler, verifiers } from "@/lib/claimcourt";
 
 const CATEGORIES = ["CONTRACT", "SERVICE", "COMMUNITY", "CREATOR", "TECH", "OTHER"];
 const DURATIONS = [
@@ -48,12 +48,21 @@ export default function FileCase() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    const before = (await getCases("", 0, 1)).total;
-    const r = await tx.run("file_case", [
-      f.title, f.claim, f.relief, f.category, f.respondent.trim(), f.statement, urls, f.stake,
-      f.respondWindow, f.rulingTimeout, f.appealWindow, f.appealTimeout,
-    ]);
-    if (r) router.push(`/case/${before}`);
+    if (tx.busy || !w.address) return;
+    const me = w.address;
+    const title = f.title.trim().replace(/\s+/g, " ");
+    // The new case id is NOT guessed from the case count: it is the id in this transaction's own return value,
+    // checked against contract state once the transaction is FINALIZED (claimant + title must match).
+    const r = await tx.run(
+      "file_case",
+      [f.title, f.claim, f.relief, f.category, f.respondent.trim(), f.statement, urls, f.stake,
+        f.respondWindow, f.rulingTimeout, f.appealWindow, f.appealTimeout],
+      { key: `file_case:${title.toLowerCase()}`, verify: (res) => verifiers.filed(me, title, res) },
+    );
+    if (!r) return;
+    let id = Number(r.values.id);
+    if (!Number.isInteger(id)) id = (await getCasesByFiler(me, 0, 1)).items[0]?.id ?? -1; // fallback: newest case this wallet filed
+    if (id >= 0) router.push(`/case/${id}`);
   }
 
   return (
@@ -113,12 +122,12 @@ export default function FileCase() {
         <Duration label="Respondent must answer within" hint="Otherwise the case is void and your stake returns." value={f.respondWindow} onChange={(n) => set({ respondWindow: n })} />
         <Duration label="Ruling must be reached within" hint="Counted from the answer. Otherwise both stakes return." value={f.rulingTimeout} onChange={(n) => set({ rulingTimeout: n })} />
         <Duration label="Appeal window after a ruling" hint={`A party who did not prevail may appeal for a ${APPEAL_BOND}-point bond.`} value={f.appealWindow} onChange={(n) => set({ appealWindow: n })} />
-        <Duration label="Appeal must be decided within" hint="Otherwise stakes and bond are returned." value={f.appealTimeout} onChange={(n) => set({ appealTimeout: n })} />
+        <Duration label="Appeal must be decided within" hint="If nobody completes it, the FIRST ruling stands and is paid out; see the appeal-finality rules." value={f.appealTimeout} onChange={(n) => set({ appealTimeout: n })} />
       </div>
 
       <div className="rule-double mt-10 pt-5">
         <button className="btn btn-red" disabled={!valid || tx.busy || !w.address || !w.isCorrectChain}>
-          {tx.busy ? "Validators are screening…" : `Stamp & file (stake ${f.stake} pts)`}
+          {tx.busy ? "Waiting for finalization…" : `Stamp & file (stake ${f.stake} pts)`}
         </button>
         {!w.address && <span className="ml-3 typed text-[12px]">Sign in with MetaMask first.</span>}
         {w.address && !w.isCorrectChain && (
