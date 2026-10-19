@@ -1,0 +1,204 @@
+{
+  "scenario": "overlap",
+  "network": "studionet",
+  "chainId": 61999,
+  "contract": "0x6f5597E5cA680444a2E5DfFD50807C1Beb045fA1",
+  "startedAt": "2026-10-19T01:58:27.887Z",
+  "actors": {
+    "A": "0x6e5C0bdBD918fEd12Ca196d4a37c8Fc8899fFE3f",
+    "B": "0x3242F9a8fa76C7Db0AC37cc2489d559F092e5B28"
+  },
+  "steps": [
+    {
+      "step": "claim_points (A)",
+      "actor": "A",
+      "method": "claim_points",
+      "tx": "0x81e48a8a8f3725851a1bbfa33d8cfec860822558f0191d6c8416e38cb92132aa",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x81e48a8a8f3725851a1bbfa33d8cfec860822558f0191d6c8416e38cb92132aa",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": null,
+      "seconds": 9,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "claim_points (B)",
+      "actor": "B",
+      "method": "claim_points",
+      "tx": "0x3ee10048bc320d0f5d1740347e333a6f8964a78f24a322d72e294938b2f0b9de",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x3ee10048bc320d0f5d1740347e333a6f8964a78f24a322d72e294938b2f0b9de",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": null,
+      "seconds": 21,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "file: Orbit Hosting service credit for missed uptime",
+      "actor": "A",
+      "method": "file_case",
+      "tx": "0xe6df7b25572f8b64851ce1d6745026ed06de3f5c6160f78d660ab8bf4cecdcee",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xe6df7b25572f8b64851ce1d6745026ed06de3f5c6160f78d660ab8bf4cecdcee",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 0,
+      "seconds": 34,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "respond",
+      "actor": "B",
+      "method": "respond",
+      "tx": "0x20a847b726e460e0518a74eed98bca4bc5a3c7fb26391d0206e39192ca109769",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x20a847b726e460e0518a74eed98bca4bc5a3c7fb26391d0206e39192ca109769",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 0,
+      "seconds": 113,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "rule",
+      "actor": "A",
+      "method": "rule",
+      "tx": "0x07cd1ffedf59c2057479f72e0ab8d7830e13b2256ee935e8ea8eb18be800be10",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x07cd1ffedf59c2057479f72e0ab8d7830e13b2256ee935e8ea8eb18be800be10",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 0,
+      "seconds": 59,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "appeal adds report-final with a fragment (path overlaps the admitted /report)",
+      "actor": "A",
+      "method": "appeal",
+      "tx": "0xaba336816f271f2d2c1d8820f8907967438cc47377ddae60594c7072686e0a17",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xaba336816f271f2d2c1d8820f8907967438cc47377ddae60594c7072686e0a17",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 0,
+      "seconds": 253,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "rule_appeal",
+      "actor": "A",
+      "method": "rule_appeal",
+      "tx": "0xf3264986d550e1a3c0777c26b6c5a97acaee899bdd89aebede9acfb561f3e73e",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xf3264986d550e1a3c0777c26b6c5a97acaee899bdd89aebede9acfb561f3e73e",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 0,
+      "seconds": 42,
+      "final_status": "FINALIZED"
+    }
+  ],
+  "checks": [
+    {
+      "check": "file_case receipt returns the case id",
+      "pass": true,
+      "detail": {
+        "id": 0
+      }
+    },
+    {
+      "check": "case exists with this claimant and AWAITING_RESPONSE",
+      "pass": true,
+      "detail": {
+        "status": "AWAITING_RESPONSE",
+        "reject": ""
+      }
+    },
+    {
+      "check": "overlapping path stored as its own exhibit, fragment stripped",
+      "pass": true,
+      "detail": [
+        "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/overlap/report-final"
+      ]
+    },
+    {
+      "check": "appeal exhibit snapshotted separately",
+      "pass": true,
+      "detail": [
+        [
+          "CLAIMANT",
+          "overlap/report",
+          false
+        ],
+        [
+          "RESPONDENT",
+          "ap/vendor-note",
+          false
+        ],
+        [
+          "APPELLANT EXTRA",
+          "p/report-final",
+          false
+        ]
+      ]
+    },
+    {
+      "check": "round two evidence list contains report AND report-final",
+      "pass": true,
+      "detail": [
+        "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/overlap/report",
+        "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/overlap/vendor-note",
+        "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/overlap/report-final"
+      ]
+    },
+    {
+      "check": "case FINAL",
+      "pass": true,
+      "detail": {
+        "first": "RESPONDENT",
+        "final": "CLAIMANT",
+        "appeal": "OVERTURNED",
+        "quote": "Penalty clause confirmed: for three missed targets Orbit Hosting owes the customer a service credit of 30 points. The credit is due now."
+      }
+    }
+  ],
+  "balances": {
+    "A": [
+      1000,
+      1050
+    ],
+    "B": [
+      1000,
+      950
+    ]
+  },
+  "stats": {
+    "appeals": 4,
+    "by_status": {
+      "APPEALED": 3,
+      "AWAITING_RESPONSE": 4,
+      "FINAL": 1,
+      "READY": 1,
+      "REJECTED": 1,
+      "RULED": 0,
+      "VOID": 0
+    },
+    "cases": 10,
+    "overturned": 1,
+    "total_staked": 580,
+    "users": 18
+  },
+  "finishedAt": "2026-10-19T02:08:01.933Z",
+  "all_finalized": true,
+  "all_checks_pass": true
+}

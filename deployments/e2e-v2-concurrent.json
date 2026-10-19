@@ -1,0 +1,223 @@
+{
+  "scenario": "concurrent",
+  "network": "studionet",
+  "chainId": 61999,
+  "contract": "0x6f5597E5cA680444a2E5DfFD50807C1Beb045fA1",
+  "startedAt": "2026-10-19T01:58:27.924Z",
+  "actors": {
+    "A": "0x098D236d308187c790fe7b4D480d76820DD8d3f5",
+    "B": "0x3ce979Be670fD614b4230138173A44B0b017FE0e",
+    "C": "0xcC1e5B01719c0cEc68a747E06B611D5cb87B0239",
+    "D": "0x2Fd025A94C819AC05a45f128210A7A5D721a1515"
+  },
+  "steps": [
+    {
+      "step": "claim_points (A)",
+      "actor": "A",
+      "method": "claim_points",
+      "tx": "0xa28456ec49ceb113c6720a676c18856b5f89bbdbd9e7164dbc3365290f8f4666",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xa28456ec49ceb113c6720a676c18856b5f89bbdbd9e7164dbc3365290f8f4666",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": null,
+      "seconds": 25,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "claim_points (B)",
+      "actor": "B",
+      "method": "claim_points",
+      "tx": "0xbd6ce5ef5d1d2c8eb650eaf6ec190662b2607284b22bb96863b86a64518c6722",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xbd6ce5ef5d1d2c8eb650eaf6ec190662b2607284b22bb96863b86a64518c6722",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": null,
+      "seconds": 21,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "claim_points (C)",
+      "actor": "C",
+      "method": "claim_points",
+      "tx": "0xa59205d3697403aa4d7b29c4e971d219b809e0d47057748688e691cadf54a890",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xa59205d3697403aa4d7b29c4e971d219b809e0d47057748688e691cadf54a890",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": null,
+      "seconds": 112,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "claim_points (D)",
+      "actor": "D",
+      "method": "claim_points",
+      "tx": "0x6a7521e8b638b344953340b89378535c3524175ab1091c02c283f00a03858ad8",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x6a7521e8b638b344953340b89378535c3524175ab1091c02c283f00a03858ad8",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": null,
+      "seconds": 46,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "file: Concurrent filing C-20693",
+      "actor": "C",
+      "method": "file_case",
+      "tx": "0x72ec8845df94cab462b6f8d2e9c9e06160e5d2f8adfca48bc2f99834ec88ca73",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x72ec8845df94cab462b6f8d2e9c9e06160e5d2f8adfca48bc2f99834ec88ca73",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 6,
+      "seconds": 202,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "file: Concurrent filing B-20693",
+      "actor": "B",
+      "method": "file_case",
+      "tx": "0x3fcdb2684d5cfee99d2349e0edc8d6d85341c264e0b15fee0b540e80384cf5a5",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x3fcdb2684d5cfee99d2349e0edc8d6d85341c264e0b15fee0b540e80384cf5a5",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 7,
+      "seconds": 215,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "file: Concurrent filing A-20691",
+      "actor": "A",
+      "method": "file_case",
+      "tx": "0xe885e34f44c9cce69ca184e79cc3ba36f25cf99bb471a70da7726ae32e10d15d",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xe885e34f44c9cce69ca184e79cc3ba36f25cf99bb471a70da7726ae32e10d15d",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 8,
+      "seconds": 235,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "file: Concurrent filing D-20694",
+      "actor": "D",
+      "method": "file_case",
+      "tx": "0x3a803d61449a6dd13df6928f85c66287322325da77a4c19181756094633dcfb0",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x3a803d61449a6dd13df6928f85c66287322325da77a4c19181756094633dcfb0",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 9,
+      "seconds": 256,
+      "final_status": "FINALIZED"
+    }
+  ],
+  "checks": [
+    {
+      "check": "every filing returned an id",
+      "pass": true,
+      "detail": [
+        8,
+        7,
+        6,
+        9
+      ]
+    },
+    {
+      "check": "ids are distinct",
+      "pass": true,
+      "detail": [
+        8,
+        7,
+        6,
+        9
+      ]
+    },
+    {
+      "check": "ids are fresh (>= case count before the burst)",
+      "pass": true,
+      "detail": {
+        "before": 6,
+        "ids": [
+          8,
+          7,
+          6,
+          9
+        ]
+      }
+    },
+    {
+      "check": "wallet A: returned id 8 is its own case (claimant + title) and its newest filed case",
+      "pass": true,
+      "detail": {
+        "id": 8,
+        "claimant": true
+      }
+    },
+    {
+      "check": "wallet B: returned id 7 is its own case (claimant + title) and its newest filed case",
+      "pass": true,
+      "detail": {
+        "id": 7,
+        "claimant": true
+      }
+    },
+    {
+      "check": "wallet C: returned id 6 is its own case (claimant + title) and its newest filed case",
+      "pass": true,
+      "detail": {
+        "id": 6,
+        "claimant": true
+      }
+    },
+    {
+      "check": "wallet D: returned id 9 is its own case (claimant + title) and its newest filed case",
+      "pass": true,
+      "detail": {
+        "id": 9,
+        "claimant": true
+      }
+    }
+  ],
+  "balances": {
+    "A": [
+      1000,
+      980
+    ],
+    "B": [
+      1000,
+      980
+    ]
+  },
+  "stats": {
+    "appeals": 0,
+    "by_status": {
+      "APPEALED": 0,
+      "AWAITING_RESPONSE": 4,
+      "FINAL": 0,
+      "READY": 2,
+      "REJECTED": 1,
+      "RULED": 3,
+      "VOID": 0
+    },
+    "cases": 10,
+    "overturned": 0,
+    "total_staked": 580,
+    "users": 17
+  },
+  "finishedAt": "2026-10-19T02:06:58.811Z",
+  "all_finalized": true,
+  "all_checks_pass": true
+}

@@ -1,0 +1,263 @@
+{
+  "scenario": "changed",
+  "network": "studionet",
+  "chainId": 61999,
+  "contract": "0x6f5597E5cA680444a2E5DfFD50807C1Beb045fA1",
+  "startedAt": "2026-10-19T02:10:00.425Z",
+  "actors": {
+    "A": "0xBb9E609bf277a0Ffb0018515d0a850037C2b17c3",
+    "B": "0x4114320e6217407814992C42DC4573ea85A00b60"
+  },
+  "steps": [
+    {
+      "step": "claim_points (A)",
+      "actor": "A",
+      "method": "claim_points",
+      "tx": "0xfe36749ea739e712c411744a92d82086ef6ad9262a2a5ff5d3554dfafd4754cc",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xfe36749ea739e712c411744a92d82086ef6ad9262a2a5ff5d3554dfafd4754cc",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": null,
+      "seconds": 25,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "claim_points (B)",
+      "actor": "B",
+      "method": "claim_points",
+      "tx": "0xb39576e21b387fbf8f0ea51e8a3c6b7ce86a18f8d8c64f40628e1994751a095d",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xb39576e21b387fbf8f0ea51e8a3c6b7ce86a18f8d8c64f40628e1994751a095d",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": null,
+      "seconds": 58,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "file: Sticker order 4417 not delivered (switch)",
+      "actor": "A",
+      "method": "file_case",
+      "tx": "0xf1d165a1a6ebd09da4cd282848b511650ce0e29a798a38a9147d373edc125b2d",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xf1d165a1a6ebd09da4cd282848b511650ce0e29a798a38a9147d373edc125b2d",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 16,
+      "seconds": 62,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "respond (version-1 note)",
+      "actor": "B",
+      "method": "respond",
+      "tx": "0xf2e59aace374c8e1784dffd4d82d69c8f4256c7d6eb8347c84a695d6835948e1",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xf2e59aace374c8e1784dffd4d82d69c8f4256c7d6eb8347c84a695d6835948e1",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 16,
+      "seconds": 42,
+      "final_status": "FINALIZED"
+    },
+    {
+      "step": "rule (validators compare live pages with the stored snapshot)",
+      "actor": "A",
+      "method": "rule",
+      "tx": "0xeb3e0eb99fa98a7f44f077d22a3ad47deeb13afe4cc482b17a313822d4cca01c",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xeb3e0eb99fa98a7f44f077d22a3ad47deeb13afe4cc482b17a313822d4cca01c",
+      "status": "ACCEPTED",
+      "execution": "SUCCESS",
+      "ok": true,
+      "expected": "success",
+      "returned_id": 16,
+      "seconds": 34,
+      "final_status": "FINALIZED"
+    }
+  ],
+  "checks": [
+    {
+      "check": "filing accepted",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "snapshots stored with sha256, full-text excerpt and truncated flag",
+      "pass": true,
+      "detail": [
+        {
+          "url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/switch/claimant-order-log.txt",
+          "sha256": "a02a4f8957eae4986a9ded4ecd73378162e63c8a1e7e82512ff0f95b7fb7690b"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/switch/respondent-note.txt",
+          "sha256": "25c665e0fb8b296ac977a90de15602eb5499887e6c2bba8e48cd727177e8f3a5"
+        }
+      ]
+    },
+    {
+      "check": "respondent page now differs from the snapshot (version 2 is live)",
+      "pass": true,
+      "detail": "Studio Lanna customer note (ClaimCourt e2e fixture, version 2, edited after the "
+    },
+    {
+      "check": "ruling flagged evidence_changed, respondent exhibit listed",
+      "pass": true,
+      "detail": {
+        "flagged": true,
+        "listed": [
+          "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/switch/respondent-note.txt"
+        ]
+      }
+    },
+    {
+      "check": "edited page did not win: ruling is not RESPONDENT",
+      "pass": true,
+      "detail": {
+        "ruling": "INCONCLUSIVE",
+        "quote": ""
+      }
+    },
+    {
+      "check": "decisive quote (if any) is from the stored snapshot, not the edited page",
+      "pass": true,
+      "detail": ""
+    }
+  ],
+  "caseId": 16,
+  "snapshots": [
+    {
+      "excerpt": "Studio Lanna order log (ClaimCourt e2e fixture). Order 4417: 200 printed stickers for a customer. Promised delivery date: 2026-10-01. Status on 2026-10-02: NOT DELIVERED, the parcel is still at the studio. Late-delivery policy: the 50 point deposit is refunded in full if the order is not delivered by the promised date.",
+      "sha256": "a02a4f8957eae4986a9ded4ecd73378162e63c8a1e7e82512ff0f95b7fb7690b",
+      "truncated": false,
+      "url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/switch/claimant-order-log.txt",
+      "who": "CLAIMANT"
+    },
+    {
+      "excerpt": "Studio Lanna customer note (ClaimCourt e2e fixture, version 1). Delivery dates quoted for custom orders are estimates only. Refunds of the deposit are handled case by case and are not automatic.",
+      "sha256": "25c665e0fb8b296ac977a90de15602eb5499887e6c2bba8e48cd727177e8f3a5",
+      "truncated": false,
+      "url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/switch/respondent-note.txt",
+      "who": "RESPONDENT"
+    }
+  ],
+  "case": {
+    "appeal_attempts": 0,
+    "appeal_bond_outcome": "",
+    "appeal_due": 0,
+    "appeal_ends": 1792377014,
+    "appeal_evidence": [],
+    "appeal_grace_s": 600,
+    "appeal_open": true,
+    "appeal_reason": "",
+    "appeal_result": "",
+    "appeal_timeout": 900,
+    "appeal_undetermined": 0,
+    "appeal_window": 600,
+    "appealed_at": 0,
+    "appellant": "",
+    "category": "OTHER",
+    "claim": "Studio Lanna promised delivery of order 4417 by 2026-10-01 and its order log says the 50 point deposit is refunded in full if the order is late. The log shows the order was not delivered.",
+    "claimant": "0xBb9E609bf277a0Ffb0018515d0a850037C2b17c3",
+    "claimant_evidence": [
+      "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/switch/claimant-order-log.txt"
+    ],
+    "claimant_statement": "The studio's own order log shows order 4417 is late and carries a refund policy.",
+    "evidence_changed": true,
+    "filed_at": 1792375886,
+    "final_at": 0,
+    "first_ruling": "INCONCLUSIVE",
+    "id": 16,
+    "pot": 100,
+    "reject_reason": "",
+    "relief": "Respondent refunds the 50 point deposit",
+    "respond_by": 1792376486,
+    "responded_at": 1792375949,
+    "respondent": "0x4114320e6217407814992C42DC4573ea85A00b60",
+    "respondent_evidence": [
+      "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/switch/respondent-note.txt"
+    ],
+    "respondent_statement": "Delivery dates are only estimates and refunds are handled case by case.",
+    "rounds": 1,
+    "ruled_at": 1792376414,
+    "ruling": "INCONCLUSIVE",
+    "ruling_due": 1792376849,
+    "ruling_timeout": 900,
+    "snapshots": [
+      {
+        "excerpt_chars": 320,
+        "sha256": "a02a4f8957eae4986a9ded4ecd73378162e63c8a1e7e82512ff0f95b7fb7690b",
+        "truncated": false,
+        "url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/switch/claimant-order-log.txt"
+      },
+      {
+        "excerpt_chars": 194,
+        "sha256": "25c665e0fb8b296ac977a90de15602eb5499887e6c2bba8e48cd727177e8f3a5",
+        "truncated": false,
+        "url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/switch/respondent-note.txt"
+      }
+    ],
+    "stake": 50,
+    "status": "RULED",
+    "title": "Sticker order 4417 not delivered (switch)",
+    "void_reason": ""
+  },
+  "rounds": [
+    {
+      "caller": "0xBb9E609bf277a0Ffb0018515d0a850037C2b17c3",
+      "decisive": -1,
+      "evidence_changed": [
+        "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/switch/respondent-note.txt"
+      ],
+      "evidence_incomplete": [],
+      "evidence_quote": "",
+      "findings": [
+        {
+          "exhibit": 0,
+          "fact": "The claimant's exhibit states a policy promising a full refund of the 50 point deposit for late delivery.",
+          "quote": "Late-delivery policy: the 50 point deposit is refunded in full if the order is not delivered by the promised date.",
+          "supports": "CLAIMANT",
+          "url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/switch/claimant-order-log.txt"
+        },
+        {
+          "exhibit": 0,
+          "fact": "The claimant's exhibit states the order was not delivered by the day after the promised delivery date.",
+          "quote": "Status on 2026-10-02: NOT DELIVERED, the parcel is still at the studio.",
+          "supports": "CLAIMANT",
+          "url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/switch/claimant-order-log.txt"
+        },
+        {
+          "exhibit": 1,
+          "fact": "The respondent's exhibit states delivery dates are estimates rather than firm guarantees.",
+          "quote": "Delivery dates quoted for custom orders are estimates only.",
+          "supports": "RESPONDENT",
+          "url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/switch/respondent-note.txt"
+        },
+        {
+          "exhibit": 1,
+          "fact": "The respondent's exhibit states deposit refunds are discretionary and not automatic.",
+          "quote": "Refunds of the deposit are handled case by case and are not automatic.",
+          "supports": "RESPONDENT",
+          "url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/switch/respondent-note.txt"
+        }
+      ],
+      "kind": "INITIAL",
+      "reasoning": "The evidence conflicts on whether the promised date created an automatic refund obligation. Because both sides provide directly relevant but inconsistent evidence on the key refund term, the claim is not established on the evidence alone.",
+      "ruling": "INCONCLUSIVE",
+      "source_url": "",
+      "sources": [
+        "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/switch/claimant-order-log.txt",
+        "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/switch/respondent-note.txt"
+      ],
+      "timestamp": 1792376414
+    }
+  ],
+  "finishedAt": "2026-10-19T02:21:20.549Z",
+  "all_finalized": true,
+  "all_checks_pass": true
+}
