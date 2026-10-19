@@ -33,7 +33,6 @@ export const VOID_TEXT: Record<string, string> = {
   NO_RESPONSE: "The respondent did not answer before the deadline. The claimant's stake was returned.",
   WITHDRAWN: "The claimant withdrew the case before an answer. The stake was returned.",
   RULING_TIMEOUT: "No ruling reached consensus before the ruling deadline. Both stakes were returned.",
-  APPEAL_TIMEOUT: "The appeal was not decided before its deadline. Both stakes and the appeal bond were returned.",
 };
 
 export function SectionTitle({ n, children, aside }: { n?: string; children: React.ReactNode; aside?: React.ReactNode }) {
@@ -60,10 +59,12 @@ export function ClerkLog({ status, hash, error }: { status: string | null; hash?
       {lines.map((l, i) => (
         <div key={l + i} className="log-line">
           <span className="text-ink-2">{String(i + 1).padStart(2, "0")}.</span> {l}
-          {i === lines.length - 1 && !failed && status !== "ACCEPTED" && status !== "FINALIZED" && <span className="animate-pulse">…</span>}
+          {i === lines.length - 1 && !failed && status !== "FINALIZED" && <span className="animate-pulse">…</span>}
         </div>
       ))}
-      {failed && <div className="text-stamp">Validators could not agree ({status}). Nothing was recorded and no points moved. You can retry, or let the deadline pass and void the case for a full refund.</div>}
+      {failed && <div className="text-stamp">Validators could not agree ({status}). Nothing was recorded and no points moved. You can retry, or let the deadline pass.</div>}
+      {status === "ACCEPTED" && !error && <div className="text-ink-2">Accepted by consensus, waiting for finalization. Not complete until FINALIZED and verified.</div>}
+      {status === "FINALIZED" && !error && <div className="text-navy">Finalized and verified against the contract state.</div>}
       {error && <div className="mt-1 text-stamp">Rejected: {error}</div>}
       {hash && (
         <a href={txExplorerUrl(hash)} target="_blank" rel="noreferrer" className="ink-link mt-1 inline-block text-ink-2">

@@ -5,12 +5,14 @@ import { usePathname } from "next/navigation";
 import { CONTRACT_ADDRESS, addressExplorerUrl, START_POINTS } from "@/lib/config";
 import { pts, shortAddress } from "@/lib/format";
 import { useTx, useUser } from "@/lib/hooks";
+import { getUser } from "@/lib/claimcourt";
 import { useWallet } from "@/lib/WalletProvider";
 
 const NAV = [
   { href: "/", label: "The Docket" },
   { href: "/file", label: "File a Case" },
   { href: "/rules", label: "Local Rules" },
+  { href: "/trust", label: "Trust & Limits" },
 ];
 
 export function Masthead() {
@@ -30,7 +32,7 @@ export function Masthead() {
             </span>
           )}
           {needsPoints && (
-            <button className="btn btn-red !px-3 !py-1.5" disabled={tx.busy} onClick={() => tx.run("claim_points", [])}>
+            <button className="btn btn-red !px-3 !py-1.5" disabled={tx.busy} onClick={() => tx.run("claim_points", [], { key: "claim_points", verify: async () => { const u = await getUser(w.address as string); return u.claimed_start ? null : "points not credited"; } })}>
               Claim {pts(START_POINTS)} pts
             </button>
           )}
