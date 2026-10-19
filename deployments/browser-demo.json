@@ -1,0 +1,244 @@
+{
+  "demo": "browser-originated workflow",
+  "site": "https://claimcourt-dikacreams-projects.vercel.app",
+  "contract": "0x6f5597E5cA680444a2E5DfFD50807C1Beb045fA1",
+  "startedAt": "2026-10-19T02:24:45.648Z",
+  "wallets": {
+    "claimant": "0xBb9E609bf277a0Ffb0018515d0a850037C2b17c3",
+    "respondent": "0x4114320e6217407814992C42DC4573ea85A00b60"
+  },
+  "steps": [
+    {
+      "step": "file case (attempt 1)",
+      "actor": "claimant",
+      "tx_from_ui": "0x440b63e161cfbe3cd81c8f6b664498a0158cb6b3a0ddf06d15cfee53a48a1d08",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x440b63e161cfbe3cd81c8f6b664498a0158cb6b3a0ddf06d15cfee53a48a1d08",
+      "ui_outcome": "OK",
+      "seconds": 48
+    },
+    {
+      "step": "respond (match stake)",
+      "actor": "respondent",
+      "tx_from_ui": "0x37f2f778028a671f639a9b1ceca636e8e3eb34593110161871d6be1909ee14b5",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x37f2f778028a671f639a9b1ceca636e8e3eb34593110161871d6be1909ee14b5",
+      "ui_outcome": "OK",
+      "seconds": 42
+    },
+    {
+      "step": "call the ruling",
+      "actor": "claimant",
+      "tx_from_ui": "0x25922bcdcfc5403ad803f205e0898f3d44cf3ab4165653e76cc99db340d893b1",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x25922bcdcfc5403ad803f205e0898f3d44cf3ab4165653e76cc99db340d893b1",
+      "ui_outcome": "OK",
+      "seconds": 60
+    },
+    {
+      "step": "file appeal (bond 100)",
+      "actor": "respondent",
+      "tx_from_ui": "0xc40439b49b32f1f9f866a504095596e7e4293541493f8298def2ddd7b85dce72",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0xc40439b49b32f1f9f866a504095596e7e4293541493f8298def2ddd7b85dce72",
+      "ui_outcome": "OK",
+      "seconds": 36
+    },
+    {
+      "step": "hear the appeal (settlement)",
+      "actor": "respondent",
+      "tx_from_ui": "0x079be0c9f216f33f22ac72a55db61d6976bacba1b0d9e50fe591121d93e5a0fd",
+      "explorer": "https://explorer-studio.genlayer.com/transactions/0x079be0c9f216f33f22ac72a55db61d6976bacba1b0d9e50fe591121d93e5a0fd",
+      "ui_outcome": "OK",
+      "seconds": 113
+    }
+  ],
+  "checks": [
+    {
+      "check": "UI navigated to the id returned by the filing transaction (not count-before)",
+      "pass": true,
+      "detail": {
+        "navigated_to": 17,
+        "count_before": 17,
+        "claimant": true
+      }
+    },
+    {
+      "check": "ruling stored with structured findings",
+      "pass": true,
+      "detail": {
+        "ruling": "CLAIMANT",
+        "findings": 2,
+        "decisive": 0
+      }
+    },
+    {
+      "check": "case FINAL after the appeal, settled on-chain",
+      "pass": true,
+      "detail": {
+        "first": "CLAIMANT",
+        "final": "CLAIMANT",
+        "appeal": "UPHELD",
+        "bond": "FORFEITED"
+      }
+    },
+    {
+      "check": "every UI action ended FINALIZED + verified",
+      "pass": true,
+      "detail": "5 actions"
+    },
+    {
+      "check": "private keys never present in the page",
+      "pass": true
+    }
+  ],
+  "rpcMethodsSeenByNodeSigner": {
+    "eth_accounts": 14,
+    "eth_chainId": 14,
+    "eth_sendTransaction": 5
+  },
+  "case": {
+    "id": 17,
+    "final": {
+      "appeal_attempts": 0,
+      "appeal_bond_outcome": "FORFEITED",
+      "appeal_due": 1792380535,
+      "appeal_ends": 1792380467,
+      "appeal_evidence": [],
+      "appeal_grace_s": 600,
+      "appeal_open": false,
+      "appeal_reason": "The first ruling should be re-examined: please re-read every exhibit under the stricter standard.",
+      "appeal_result": "UPHELD",
+      "appeal_timeout": 3600,
+      "appeal_undetermined": 0,
+      "appeal_window": 3600,
+      "appealed_at": 1792376935,
+      "appellant": "0x4114320e6217407814992C42DC4573ea85A00b60",
+      "category": "OTHER",
+      "claim": "Respondent bet me 10 points that the Eiffel Tower in Paris is taller than 320 metres including its antennas, and refuses to pay although the public fact sheet states its current height.",
+      "claimant": "0xBb9E609bf277a0Ffb0018515d0a850037C2b17c3",
+      "claimant_evidence": [
+        "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/e2e/tower-height.txt"
+      ],
+      "claimant_statement": "The fact sheet cited as my exhibit states a height of about 330 metres including antennas, which is more than 320 metres.",
+      "evidence_changed": false,
+      "filed_at": 1792376769,
+      "final_at": 1792376974,
+      "first_ruling": "CLAIMANT",
+      "id": 17,
+      "pot": 100,
+      "reject_reason": "",
+      "relief": "Respondent pays the 10 point bet",
+      "respond_by": 1792463169,
+      "responded_at": 1792376822,
+      "respondent": "0x4114320e6217407814992C42DC4573ea85A00b60",
+      "respondent_evidence": [
+        "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/e2e/tower-height.txt"
+      ],
+      "respondent_statement": "I believe the tower is only 300 metres tall as originally built, so I do not owe the bet.",
+      "rounds": 2,
+      "ruled_at": 1792376867,
+      "ruling": "CLAIMANT",
+      "ruling_due": 1792463222,
+      "ruling_timeout": 86400,
+      "snapshots": [
+        {
+          "excerpt_chars": 337,
+          "sha256": "17eab3da8ed7909c67eaf53efd9d2e5dd4aa067d603944bc04b99864bd153a50",
+          "truncated": false,
+          "url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/e2e/tower-height.txt"
+        },
+        {
+          "excerpt_chars": 337,
+          "sha256": "17eab3da8ed7909c67eaf53efd9d2e5dd4aa067d603944bc04b99864bd153a50",
+          "truncated": false,
+          "url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/e2e/tower-height.txt"
+        }
+      ],
+      "stake": 50,
+      "status": "FINAL",
+      "title": "Browser demo Eiffel bet 65085",
+      "void_reason": ""
+    },
+    "rounds": [
+      {
+        "caller": "0xBb9E609bf277a0Ffb0018515d0a850037C2b17c3",
+        "decisive": 0,
+        "evidence_changed": [],
+        "evidence_incomplete": [],
+        "evidence_quote": "The Eiffel Tower in Paris has a current total height of 330 metres (1,083 ft) including its broadcast antennas.",
+        "findings": [
+          {
+            "exhibit": 0,
+            "fact": "The Eiffel Tower's current total height, including antennas, is 330 metres.",
+            "quote": "The Eiffel Tower in Paris has a current total height of 330 metres (1,083 ft) including its broadcast antennas.",
+            "supports": "CLAIMANT",
+            "url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/e2e/tower-height.txt"
+          },
+          {
+            "exhibit": 0,
+            "fact": "The Eiffel Tower's height including antennas exceeds 320 metres.",
+            "quote": "The tower is therefore taller than 320 metres including its antennas.",
+            "supports": "CLAIMANT",
+            "url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/e2e/tower-height.txt"
+          }
+        ],
+        "kind": "INITIAL",
+        "reasoning": "The evidence explicitly states the Eiffel Tower's height including antennas is 330 metres, which is greater than 320 metres. This directly supports the claimant's position and refutes the respondent's belief.",
+        "ruling": "CLAIMANT",
+        "source_url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/e2e/tower-height.txt",
+        "sources": [
+          "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/e2e/tower-height.txt"
+        ],
+        "timestamp": 1792376867
+      },
+      {
+        "caller": "0x4114320e6217407814992C42DC4573ea85A00b60",
+        "decisive": 0,
+        "evidence_changed": [],
+        "evidence_incomplete": [],
+        "evidence_quote": "The Eiffel Tower in Paris has a current total height of 330 metres (1,083 ft) including its broadcast antennas.",
+        "findings": [
+          {
+            "exhibit": 0,
+            "fact": "The exhibit states the tower’s current total height including antennas is 330 metres, which is greater than 320 metres.",
+            "quote": "The Eiffel Tower in Paris has a current total height of 330 metres (1,083 ft) including its broadcast antennas.",
+            "supports": "CLAIMANT",
+            "url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/e2e/tower-height.txt"
+          },
+          {
+            "exhibit": 0,
+            "fact": "The exhibit distinguishes the lower roof height from the total current height including antennas.",
+            "quote": "Its roof height, without antennas, is 300 metres.",
+            "supports": "CLAIMANT",
+            "url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/e2e/tower-height.txt"
+          },
+          {
+            "exhibit": 0,
+            "fact": "The exhibit expressly confirms the proposition that was the subject of the bet.",
+            "quote": "The tower is therefore taller than 320 metres including its antennas.",
+            "supports": "CLAIMANT",
+            "url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/e2e/tower-height.txt"
+          }
+        ],
+        "kind": "APPEAL",
+        "reasoning": "Under the stricter appeal standard, the only evidence directly states that the Eiffel Tower’s current total height including antennas is 330 metres. That proves the claimed fact and does not clearly support any different result, so the original ruling remains correct.",
+        "ruling": "CLAIMANT",
+        "source_url": "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/e2e/tower-height.txt",
+        "sources": [
+          "https://raw.githubusercontent.com/DikaCream/ClaimCourt/main/docs/evidence/e2e/tower-height.txt"
+        ],
+        "timestamp": 1792376974
+      }
+    ]
+  },
+  "uiPersistedTxRecords": [
+    {
+      "method": "rule",
+      "state": "CONFIRMED",
+      "hash": "0x25922bcdcfc5403ad803f205e0898f3d44cf3ab4165653e76cc99db340d893b1"
+    },
+    {
+      "method": "file_case",
+      "state": "CONFIRMED",
+      "hash": "0x440b63e161cfbe3cd81c8f6b664498a0158cb6b3a0ddf06d15cfee53a48a1d08"
+    }
+  ],
+  "finishedAt": "2026-10-19T02:31:43.464Z"
+}

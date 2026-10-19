@@ -265,7 +265,7 @@ The UNDETERMINED network-failure appeal cannot be forced on a live network, so i
 ## 8. Frontend finality, tx persistence and case ids
 
 - `sendTx` returns success only when the transaction is **FINALIZED** *and* a verifier confirms the expected contract state (for example a filed case exists with this claimant, or the status is the expected one). ACCEPTED alone shows "pending".
-- Every submitted hash is written to `localStorage` (`claimcourt.txs.v1`) before the wallet prompt resolves, so a reload resumes watching instead of resubmitting. Re-clicking the same action while one with the same key is pending reuses it (no duplicate submission).
+- Every submitted hash is written to `localStorage` (`claimcourt:txs:v1`) before the wallet prompt resolves, so a reload resumes watching instead of resubmitting. Re-clicking the same action while one with the same key is pending reuses it (no duplicate submission).
 - Right before signing the app re-reads the account and `eth_chainId`; any change from the connected account or chain 61999 aborts with a message.
 - The new case id comes from the transaction's return value (receipt); if that is not readable, the app looks up the filer's newest case (`get_cases_by_filer`) and verifies claimant and title. Ids are never guessed from a global counter, so concurrent filings by different wallets each find their own case.
 
